@@ -1,788 +1,714 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>I'm Sorry, My Love 💖</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,600&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<title>Pour toi, Chaima 💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --rose: #e8436a;
-    --rose-light: #f9ccd8;
-    --rose-deep: #c02050;
-    --cream: #fff8f9;
-    --gold: #d4a853;
-    --text: #2d1a22;
-    --soft: #7a4558;
+    --rose:        #d94f7a;
+    --rose-deep:   #a8284e;
+    --rose-light:  #f9d0de;
+    --rose-pale:   #fff3f6;
+    --blush:       #fde8f0;
+    --gold:        #c9974a;
+    --text:        #2a1520;
+    --muted:       #8c4d63;
+    --cream:       #fffaf9;
   }
 
+  html { scroll-behavior: smooth; }
+
   body {
-    font-family: 'Lato', sans-serif;
+    font-family: 'Nunito', sans-serif;
     background: var(--cream);
     min-height: 100vh;
     overflow-x: hidden;
-    cursor: default;
   }
 
-  /* Floating hearts background */
-  #hearts-bg {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+  /* Custom cursor */
+  body { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ctext y='20' font-size='20'%3E💖%3C/text%3E%3C/svg%3E") 12 12, auto; }
+
+  /* ── Floating petals background ── */
+  #petal-bg {
+    position: fixed; inset: 0;
     pointer-events: none;
     z-index: 0;
     overflow: hidden;
   }
-
-  .bg-heart {
+  .fp {
     position: absolute;
     bottom: -60px;
-    font-size: 20px;
     opacity: 0;
-    animation: floatUp linear infinite;
-    color: var(--rose-light);
+    font-size: 16px;
+    animation: riseUp linear infinite;
+    filter: blur(0.3px);
+  }
+  @keyframes riseUp {
+    0%   { transform: translateY(0) rotate(0deg) scale(0.7); opacity: 0; }
+    8%   { opacity: 0.4; }
+    88%  { opacity: 0.25; }
+    100% { transform: translateY(-115vh) rotate(400deg) scale(1.1); opacity: 0; }
   }
 
-  @keyframes floatUp {
-    0%   { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
-    10%  { opacity: 0.35; }
-    90%  { opacity: 0.2; }
-    100% { transform: translateY(-110vh) rotate(360deg) scale(1.2); opacity: 0; }
-  }
-
-  /* Main layout */
+  /* ── App wrapper ── */
   #app {
-    position: relative;
-    z-index: 1;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    padding: 30px 20px 60px;
+    min-height: 100vh;
+    padding: 20px 16px 80px;
   }
 
-  /* Envelope intro screen */
-  #envelope-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  /* ════════════════════════════
+     SCREEN 1 — Envelope
+  ════════════════════════════ */
+  #screen-envelope {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
     min-height: 100vh;
-    animation: fadeIn 1.2s ease both;
+    gap: 0;
+    animation: fadeIn 1.4s ease both;
   }
 
-  #envelope-screen h1 {
-    font-family: 'Playfair Display', serif;
+  .to-chaima {
+    font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     color: var(--rose);
-    font-size: 1.5rem;
-    margin-bottom: 40px;
-    letter-spacing: 1px;
-    text-align: center;
-    animation: fadeSlideDown 1.5s ease both 0.5s;
-  }
-
-  .envelope-wrap {
-    position: relative;
-    cursor: pointer;
-    animation: float 3s ease-in-out infinite;
-    filter: drop-shadow(0 12px 32px rgba(232,67,106,0.22));
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50%       { transform: translateY(-12px); }
-  }
-
-  .envelope-wrap:hover .envelope-body { background: #fde8ef; }
-  .envelope-wrap:hover .env-label { letter-spacing: 3px; color: var(--rose-deep); }
-
-  .envelope-body {
-    width: 260px; height: 175px;
-    background: #fff0f3;
-    border: 2.5px solid var(--rose);
-    border-radius: 6px;
-    position: relative;
-    transition: background 0.3s;
-    overflow: hidden;
-  }
-
-  .env-flap {
-    position: absolute;
-    top: 0; left: 0;
-    width: 260px; height: 90px;
-    clip-path: polygon(0 0, 130px 75px, 260px 0);
-    background: var(--rose);
-    opacity: 0.85;
-    transform-origin: top center;
-    transition: transform 0.5s ease;
-  }
-
-  .env-bottom-flap {
-    position: absolute;
-    bottom: 0; left: 0;
-    width: 260px; height: 80px;
-    clip-path: polygon(0 80px, 130px 10px, 260px 80px);
-    background: var(--rose-light);
-  }
-
-  .env-left {
-    position: absolute;
-    top: 0; left: 0;
-    width: 120px; height: 175px;
-    clip-path: polygon(0 0, 0 175px, 120px 87px);
-    background: #fce4ec;
-  }
-
-  .env-right {
-    position: absolute;
-    top: 0; right: 0;
-    width: 120px; height: 175px;
-    clip-path: polygon(120px 0, 120px 175px, 0 87px);
-    background: #fce4ec;
-  }
-
-  .env-seal {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 46px; height: 46px;
-    background: var(--rose);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-    box-shadow: 0 0 0 4px #fff0f3, 0 0 0 6px var(--rose);
-    z-index: 10;
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 4px #fff0f3, 0 0 0 6px var(--rose); }
-    50%       { transform: translate(-50%, -50%) scale(1.08); box-shadow: 0 0 0 6px #fff0f3, 0 0 0 10px rgba(232,67,106,0.3); }
-  }
-
-  .env-label {
-    margin-top: 28px;
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    color: var(--soft);
-    font-size: 1.05rem;
+    font-size: 1.45rem;
     letter-spacing: 2px;
-    transition: all 0.3s;
+    margin-bottom: 44px;
+    animation: dropDown 1.4s ease both 0.4s;
+    text-align: center;
   }
 
-  /* Main letter screen */
-  #letter-screen {
+  .env-outer {
+    cursor: pointer;
+    animation: levitate 3.2s ease-in-out infinite;
+    filter: drop-shadow(0 18px 40px rgba(217,79,122,0.25));
+    transition: filter 0.3s;
+  }
+  .env-outer:hover {
+    filter: drop-shadow(0 22px 50px rgba(217,79,122,0.38));
+  }
+
+  @keyframes levitate {
+    0%,100% { transform: translateY(0) rotate(-1deg); }
+    50%      { transform: translateY(-14px) rotate(1deg); }
+  }
+
+  /* SVG envelope */
+  .env-svg { display: block; }
+
+  .env-hint {
+    margin-top: 26px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 1.05rem;
+    letter-spacing: 3px;
+    text-align: center;
+    animation: blink 2.2s ease-in-out infinite 1s;
+  }
+  @keyframes blink {
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0.45; }
+  }
+
+  /* ════════════════════════════
+     SCREEN 2 — Lettre
+  ════════════════════════════ */
+  #screen-letter {
     display: none;
     flex-direction: column;
     align-items: center;
+    width: 100%; max-width: 700px;
+  }
+
+  /* Star ribbon top */
+  .ribbon-top {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 20px;
+    animation: fadeIn 0.8s ease both 0.2s;
+  }
+  .ribbon-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--rose-light), transparent); }
+  .ribbon-stars { font-size: 16px; letter-spacing: 4px; }
+
+  /* Paper card */
+  .paper {
     width: 100%;
-    max-width: 680px;
-    animation: letterReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  }
-
-  @keyframes letterReveal {
-    from { transform: translateY(60px) scale(0.85); opacity: 0; }
-    to   { transform: translateY(0) scale(1); opacity: 1; }
-  }
-
-  /* Petals top decoration */
-  .petals-row {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 16px;
-    animation: fadeIn 1s ease both 0.3s;
-  }
-
-  .petal {
-    font-size: 18px;
-    animation: sway 2.5s ease-in-out infinite;
-  }
-
-  .petal:nth-child(2) { animation-delay: 0.2s; }
-  .petal:nth-child(3) { animation-delay: 0.4s; }
-  .petal:nth-child(4) { animation-delay: 0.6s; }
-  .petal:nth-child(5) { animation-delay: 0.8s; }
-
-  @keyframes sway {
-    0%, 100% { transform: rotate(-8deg) translateY(0); }
-    50%       { transform: rotate(8deg) translateY(-4px); }
-  }
-
-  /* The letter card */
-  .letter-card {
     background: #fff;
-    border: 1.5px solid #f8cdd7;
-    border-radius: 16px;
-    padding: 44px 48px;
-    box-shadow: 0 8px 48px rgba(232,67,106,0.1), 0 2px 12px rgba(0,0,0,0.04);
-    width: 100%;
+    border-radius: 20px;
+    box-shadow:
+      0 2px 0 var(--rose-light),
+      0 6px 0 #f5c5d4,
+      0 12px 48px rgba(217,79,122,0.1),
+      0 2px 8px rgba(0,0,0,0.04);
+    padding: 52px 56px 44px;
     position: relative;
     overflow: hidden;
+    animation: paperSlide 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) both 0.1s;
+  }
+  @keyframes paperSlide {
+    from { transform: translateY(70px) scale(0.88) rotate(-1deg); opacity: 0; }
+    to   { transform: translateY(0) scale(1) rotate(0); opacity: 1; }
   }
 
-  .letter-card::before {
+  /* Decorative corner roses */
+  .corner { position: absolute; font-size: 28px; opacity: 0.18; }
+  .corner.tl { top: 14px; left: 18px; transform: rotate(-20deg); }
+  .corner.tr { top: 14px; right: 18px; transform: rotate(20deg); }
+  .corner.bl { bottom: 14px; left: 18px; transform: rotate(20deg); }
+  .corner.br { bottom: 14px; right: 18px; transform: rotate(-20deg); }
+
+  /* Top stripe */
+  .paper::before {
     content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--rose-light), var(--rose), var(--rose-light));
+    position: absolute; top: 0; left: 0; right: 0; height: 5px;
+    background: repeating-linear-gradient(90deg, var(--rose) 0, var(--rose) 18px, var(--rose-light) 18px, var(--rose-light) 24px);
   }
 
-  .letter-header {
-    text-align: center;
-    margin-bottom: 32px;
-  }
-
-  .letter-header .date-line {
-    font-size: 0.8rem;
-    color: var(--soft);
-    letter-spacing: 2px;
+  /* Header */
+  .letter-head { text-align: center; margin-bottom: 30px; }
+  .letter-head .subtitle {
+    font-size: 0.78rem;
+    letter-spacing: 3px;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    color: var(--muted);
+    margin-bottom: 10px;
   }
-
-  .letter-header h2 {
-    font-family: 'Playfair Display', serif;
+  .letter-head h1 {
+    font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     color: var(--rose);
-    font-size: 2.2rem;
-    line-height: 1.2;
-    animation: fadeSlideDown 0.8s ease both 0.2s;
+    font-size: 2.8rem;
+    line-height: 1.15;
+    animation: fadeIn 0.8s ease both 0.4s;
   }
-
-  .letter-body p {
-    color: var(--text);
-    font-size: 1.05rem;
-    line-height: 1.9;
-    margin-bottom: 18px;
-    font-weight: 300;
-    animation: fadeSlideUp 0.7s ease both;
-  }
-
-  .letter-body p:nth-child(1) { animation-delay: 0.3s; }
-  .letter-body p:nth-child(2) { animation-delay: 0.5s; }
-  .letter-body p:nth-child(3) { animation-delay: 0.7s; }
-  .letter-body p:nth-child(4) { animation-delay: 0.9s; }
-
-  .highlight {
+  .letter-head .name-accent {
     color: var(--rose-deep);
-    font-weight: 400;
-    font-style: italic;
+    font-weight: 600;
   }
 
-  .letter-sign {
-    margin-top: 32px;
-    text-align: right;
-    animation: fadeIn 0.8s ease both 1.1s;
+  /* Divider */
+  .div-heart {
+    display: flex; align-items: center; gap: 14px;
+    margin: 26px 0;
+  }
+  .div-heart .dline { flex: 1; height: 1px; background: var(--rose-light); }
+  .div-heart .dico { font-size: 20px; animation: heartPop 1.8s ease-in-out infinite; }
+  @keyframes heartPop {
+    0%,100% { transform: scale(1); }
+    50%      { transform: scale(1.22); }
   }
 
-  .letter-sign .forever {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    color: var(--soft);
-    font-size: 0.95rem;
-    margin-bottom: 4px;
-  }
-
-  .letter-sign .name {
-    font-family: 'Playfair Display', serif;
-    color: var(--rose);
-    font-size: 1.6rem;
-    font-weight: 700;
-  }
-
-  /* Promises section */
-  .promises {
-    margin-top: 36px;
-    padding: 28px 32px;
-    background: #fff8fa;
-    border-radius: 12px;
-    border: 1px dashed var(--rose-light);
-    animation: fadeIn 0.8s ease both 1.3s;
-  }
-
-  .promises h3 {
-    font-family: 'Playfair Display', serif;
-    color: var(--rose);
-    font-size: 1.15rem;
+  /* Body text */
+  .letter-body p {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 300;
+    font-size: 1.05rem;
+    line-height: 2;
+    color: var(--text);
     margin-bottom: 18px;
+    opacity: 0;
+    animation: slideUp 0.7s ease forwards;
+  }
+  .letter-body p:nth-child(1) { animation-delay: 0.5s; }
+  .letter-body p:nth-child(2) { animation-delay: 0.75s; }
+  .letter-body p:nth-child(3) { animation-delay: 1s; }
+  .letter-body p:nth-child(4) { animation-delay: 1.25s; }
+
+  .accent { color: var(--rose-deep); font-style: italic; font-weight: 400; }
+  .bold-rose { color: var(--rose); font-weight: 600; }
+
+  /* Signature */
+  .signature {
+    margin-top: 28px;
+    text-align: right;
+    opacity: 0;
+    animation: fadeIn 0.8s ease forwards 1.5s;
+  }
+  .signature .pour { font-size: 0.9rem; color: var(--muted); letter-spacing: 1px; margin-bottom: 4px; }
+  .signature .sname {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 2rem;
+    color: var(--rose);
+    font-weight: 600;
+  }
+
+  /* Promises box */
+  .promises-box {
+    margin-top: 32px;
+    background: var(--blush);
+    border-radius: 14px;
+    border: 1.5px dashed #f0aac2;
+    padding: 30px 34px;
+    opacity: 0;
+    animation: fadeIn 0.8s ease forwards 1.7s;
+  }
+  .promises-box h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--rose-deep);
+    font-size: 1.3rem;
     text-align: center;
+    margin-bottom: 20px;
     letter-spacing: 1px;
   }
-
-  .promise-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .promise-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    font-size: 0.98rem;
-    color: var(--text);
-    font-weight: 300;
-    line-height: 1.6;
+  .p-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  .p-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 0.98rem; font-weight: 300; color: var(--text); line-height: 1.7;
     opacity: 0;
-    transform: translateX(-20px);
-    animation: slideInLeft 0.5s ease forwards;
+    transform: translateX(-18px);
+    animation: slideInL 0.5s ease forwards;
   }
+  .p-item:nth-child(1) { animation-delay: 1.9s; }
+  .p-item:nth-child(2) { animation-delay: 2.1s; }
+  .p-item:nth-child(3) { animation-delay: 2.3s; }
+  .p-item:nth-child(4) { animation-delay: 2.5s; }
+  .p-item:nth-child(5) { animation-delay: 2.7s; }
+  .p-item:nth-child(6) { animation-delay: 2.9s; }
+  .p-ico { font-size: 15px; flex-shrink: 0; margin-top: 3px; }
 
-  .promise-item:nth-child(1) { animation-delay: 1.5s; }
-  .promise-item:nth-child(2) { animation-delay: 1.7s; }
-  .promise-item:nth-child(3) { animation-delay: 1.9s; }
-  .promise-item:nth-child(4) { animation-delay: 2.1s; }
-  .promise-item:nth-child(5) { animation-delay: 2.3s; }
-
-  .promise-icon {
-    font-size: 16px;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  @keyframes slideInLeft {
-    to { opacity: 1; transform: translateX(0); }
-  }
-
-  /* Response buttons */
-  .response-section {
-    margin-top: 40px;
+  /* Buttons section */
+  .btn-section {
+    margin-top: 44px;
     text-align: center;
-    animation: fadeIn 0.8s ease both 2.5s;
+    opacity: 0;
+    animation: fadeIn 0.8s ease forwards 3.1s;
+    width: 100%;
   }
-
-  .response-section p {
-    font-family: 'Playfair Display', serif;
+  .btn-section .question {
+    font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    color: var(--soft);
-    font-size: 1.1rem;
-    margin-bottom: 24px;
+    color: var(--muted);
+    font-size: 1.25rem;
+    margin-bottom: 28px;
   }
+  .btns { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
 
-  .btn-group {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .btn-yes {
-    padding: 16px 48px;
+  .btn-oui {
+    padding: 17px 54px;
     background: var(--rose);
     color: #fff;
-    border: none;
-    border-radius: 50px;
-    font-family: 'Playfair Display', serif;
+    border: none; border-radius: 60px;
+    font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     cursor: pointer;
+    box-shadow: 0 8px 28px rgba(217,79,122,0.38);
     transition: all 0.3s;
-    box-shadow: 0 6px 24px rgba(232,67,106,0.35);
+    letter-spacing: 1px;
   }
-
-  .btn-yes:hover {
+  .btn-oui:hover {
     background: var(--rose-deep);
-    transform: translateY(-3px) scale(1.04);
-    box-shadow: 0 10px 32px rgba(232,67,106,0.45);
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 14px 36px rgba(168,40,78,0.42);
+  }
+  .btn-oui:active { transform: scale(0.97); }
+
+  .btn-non {
+    padding: 17px 44px;
+    background: transparent;
+    color: var(--muted);
+    border: 1.5px solid var(--rose-light);
+    border-radius: 60px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: border-color 0.3s;
+    position: relative;
   }
 
-  .btn-yes:active { transform: scale(0.97); }
+  /* ════════════════════════════
+     SCREEN 3 — Pardonnée
+  ════════════════════════════ */
+  #screen-pardonne {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    padding: 40px 20px;
+  }
 
-  .btn-no {
-    padding: 16px 40px;
+  .heart-burst {
+    position: relative;
+    margin-bottom: 28px;
+  }
+  .main-heart {
+    font-size: 130px;
+    display: block;
+    animation: bigBeat 1s ease-in-out infinite;
+    filter: drop-shadow(0 10px 30px rgba(217,79,122,0.45));
+  }
+  @keyframes bigBeat {
+    0%,100% { transform: scale(1); }
+    15%  { transform: scale(1.15); }
+    30%  { transform: scale(1); }
+    45%  { transform: scale(1.09); }
+    60%  { transform: scale(1); }
+  }
+
+  .orbit {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 220px; height: 220px;
+    margin-top: -110px; margin-left: -110px;
+    pointer-events: none;
+  }
+  .orbit-dot {
+    position: absolute;
+    font-size: 20px;
+    animation: orbitSpin linear infinite;
+  }
+  @keyframes orbitSpin {
+    from { transform: rotate(var(--start)) translateX(100px) rotate(calc(-1 * var(--start))); }
+    to   { transform: rotate(calc(var(--start) + 360deg)) translateX(100px) rotate(calc(-1 * (var(--start) + 360deg))); }
+  }
+
+  .pardonne-title {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--rose);
+    font-size: 3.2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    animation: bounceIn 0.9s cubic-bezier(0.34,1.56,0.64,1) both 0.2s;
+  }
+  .pardonne-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 1.3rem;
+    margin-bottom: 32px;
+    animation: slideUp 0.7s ease both 0.5s;
+  }
+  .emoji-row {
+    display: flex; gap: 10px; font-size: 26px;
+    margin-bottom: 30px;
+    animation: fadeIn 0.5s ease both 0.8s;
+  }
+  .emoji-row span { animation: sway 2s ease-in-out infinite; }
+  .emoji-row span:nth-child(2) { animation-delay: 0.15s; }
+  .emoji-row span:nth-child(3) { animation-delay: 0.3s; }
+  .emoji-row span:nth-child(4) { animation-delay: 0.45s; }
+  .emoji-row span:nth-child(5) { animation-delay: 0.6s; }
+
+  @keyframes sway {
+    0%,100% { transform: translateY(0) rotate(-5deg); }
+    50%      { transform: translateY(-6px) rotate(5deg); }
+  }
+
+  .final-msg {
+    max-width: 400px;
+    font-weight: 300;
+    font-size: 1.05rem;
+    color: var(--text);
+    line-height: 1.9;
+    margin-bottom: 36px;
+    animation: fadeIn 0.7s ease both 1s;
+  }
+
+  .btn-rejouer {
+    padding: 13px 38px;
     background: transparent;
-    color: var(--soft);
+    color: var(--muted);
     border: 1.5px solid var(--rose-light);
-    border-radius: 50px;
-    font-family: 'Playfair Display', serif;
+    border-radius: 60px;
+    font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 1rem;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-  }
-
-  .btn-no:hover { border-color: var(--rose-light); }
-
-  /* Forgiven screen */
-  #forgiven-screen {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    text-align: center;
-    animation: fadeIn 0.6s ease both;
-  }
-
-  .big-heart-container {
-    position: relative;
-    margin-bottom: 32px;
-  }
-
-  .big-heart {
-    font-size: 120px;
-    animation: heartBeat 1.2s ease-in-out infinite;
-    display: block;
-    filter: drop-shadow(0 8px 24px rgba(232,67,106,0.4));
-  }
-
-  @keyframes heartBeat {
-    0%, 100% { transform: scale(1); }
-    14%  { transform: scale(1.12); }
-    28%  { transform: scale(1); }
-    42%  { transform: scale(1.08); }
-    56%  { transform: scale(1); }
-  }
-
-  .sparkles {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 200px; height: 200px;
-    pointer-events: none;
-  }
-
-  .sparkle {
-    position: absolute;
-    font-size: 18px;
-    animation: sparkleAnim 1.5s ease-in-out infinite;
-  }
-
-  @keyframes sparkleAnim {
-    0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
-    50%       { transform: scale(1) rotate(180deg); opacity: 1; }
-  }
-
-  .forgiven-title {
-    font-family: 'Playfair Display', serif;
-    color: var(--rose);
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: 12px;
-    animation: bounceIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both 0.3s;
-  }
-
-  .forgiven-sub {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    color: var(--soft);
-    font-size: 1.25rem;
-    margin-bottom: 40px;
-    animation: fadeSlideUp 0.7s ease both 0.6s;
-  }
-
-  .confetti-row {
-    display: flex;
-    gap: 8px;
-    font-size: 24px;
-    animation: fadeIn 0.5s ease both 0.9s;
-    margin-bottom: 32px;
-  }
-
-  .btn-restart {
-    padding: 12px 36px;
-    background: transparent;
-    color: var(--soft);
-    border: 1.5px solid var(--rose-light);
-    border-radius: 50px;
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-size: 0.95rem;
-    cursor: pointer;
     transition: all 0.3s;
-    animation: fadeIn 0.5s ease both 1.2s;
+    animation: fadeIn 0.5s ease both 1.3s;
+    letter-spacing: 1px;
   }
+  .btn-rejouer:hover { background: var(--blush); border-color: var(--rose); color: var(--rose); }
 
-  .btn-restart:hover { background: #fff0f3; border-color: var(--rose); color: var(--rose); }
-
-  /* Shared animations */
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-
-  @keyframes fadeSlideDown {
-    from { opacity: 0; transform: translateY(-16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fadeSlideUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes bounceIn {
-    from { opacity: 0; transform: scale(0.5); }
-    to   { opacity: 1; transform: scale(1); }
-  }
-
-  /* Rose divider */
-  .rose-divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 28px 0;
-    color: var(--rose-light);
-    font-size: 18px;
-  }
-
-  .rose-line {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--rose-light), transparent);
-  }
+  /* ── Shared keyframes ── */
+  @keyframes fadeIn    { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes dropDown  { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideUp   { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideInL  { to { opacity: 1; transform: translateX(0); } }
+  @keyframes bounceIn  { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: scale(1); } }
 
   @media (max-width: 600px) {
-    .letter-card { padding: 28px 22px; }
-    .promises { padding: 22px 18px; }
-    .forgiven-title { font-size: 2.2rem; }
-    .big-heart { font-size: 90px; }
+    .paper { padding: 36px 22px 32px; }
+    .letter-head h1 { font-size: 2.1rem; }
+    .promises-box { padding: 22px 18px; }
+    .pardonne-title { font-size: 2.4rem; }
+    .main-heart { font-size: 100px; }
+    .corner { display: none; }
   }
 </style>
 </head>
 <body>
 
-<!-- Floating hearts background -->
-<div id="hearts-bg"></div>
+<div id="petal-bg"></div>
 
 <div id="app">
 
-  <!-- Screen 1: Envelope -->
-  <div id="envelope-screen">
-    <h1>A letter just for you... 💌</h1>
-    <div class="envelope-wrap" onclick="openEnvelope()">
-      <div class="envelope-body">
-        <div class="env-left"></div>
-        <div class="env-right"></div>
-        <div class="env-bottom-flap"></div>
-        <div class="env-flap" id="env-flap"></div>
-        <div class="env-seal">💖</div>
-      </div>
-      <p class="env-label">Tap to open</p>
+  <!-- ══ SCREEN 1 : Enveloppe ══ -->
+  <div id="screen-envelope">
+    <p class="to-chaima">✉ Une lettre rien que pour toi, Chaima...</p>
+
+    <div class="env-outer" onclick="ouvrirEnveloppe()">
+      <svg class="env-svg" width="300" height="200" viewBox="0 0 300 200">
+        <defs>
+          <filter id="soft" x="-10%" y="-10%" width="120%" height="120%">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+        <!-- Body -->
+        <rect x="0" y="30" width="300" height="170" rx="10" fill="#fff0f5" stroke="#e8a0bc" stroke-width="2"/>
+        <!-- Side flaps -->
+        <polygon points="0,30 150,125 300,30" fill="#fdd5e3" opacity="0.7"/>
+        <!-- Bottom flap -->
+        <polygon points="0,200 150,115 300,200" fill="#fce4ee"/>
+        <!-- Left -->
+        <polygon points="0,30 0,200 130,115" fill="#fde8f0"/>
+        <!-- Right -->
+        <polygon points="300,30 300,200 170,115" fill="#fde8f0"/>
+        <!-- Top flap (animated) -->
+        <polygon id="svg-flap" points="0,30 150,120 300,30" fill="#d94f7a" opacity="0.88"
+          style="transform-origin:150px 30px; transform:rotateX(0deg); transition:transform 0.6s ease;"/>
+        <!-- Wax seal -->
+        <circle cx="150" cy="115" r="26" fill="#d94f7a" stroke="#fff0f5" stroke-width="4"/>
+        <text x="150" y="123" text-anchor="middle" font-size="22">💖</text>
+        <!-- Name tag -->
+        <text x="150" y="18" text-anchor="middle" font-family="Georgia, serif" font-style="italic" fill="#8c4d63" font-size="13" letter-spacing="2">Chaima 🌹</text>
+      </svg>
     </div>
+
+    <p class="env-hint">Appuie pour ouvrir ✨</p>
   </div>
 
-  <!-- Screen 2: Letter -->
-  <div id="letter-screen">
-    <div class="petals-row">
-      <span class="petal">🌸</span>
-      <span class="petal">🌹</span>
-      <span class="petal">💐</span>
-      <span class="petal">🌹</span>
-      <span class="petal">🌸</span>
+  <!-- ══ SCREEN 2 : La Lettre ══ -->
+  <div id="screen-letter">
+
+    <div class="ribbon-top">
+      <div class="ribbon-line"></div>
+      <span class="ribbon-stars">🌸 🌹 🌸</span>
+      <div class="ribbon-line"></div>
     </div>
 
-    <div class="letter-card">
-      <div class="letter-header">
-        <div class="date-line">A letter from the heart</div>
-        <h2>My Dearest Love...</h2>
+    <div class="paper">
+      <span class="corner tl">🌹</span>
+      <span class="corner tr">🌹</span>
+      <span class="corner bl">🌸</span>
+      <span class="corner br">🌸</span>
+
+      <div class="letter-head">
+        <p class="subtitle">du fond de mon cœur</p>
+        <h1>Mon amour,<br><span class="name-accent">Chaima...</span></h1>
       </div>
 
-      <div class="rose-divider">
-        <div class="rose-line"></div>
-        <span>🌹</span>
-        <div class="rose-line"></div>
+      <div class="div-heart">
+        <div class="dline"></div>
+        <span class="dico">🌹</span>
+        <div class="dline"></div>
       </div>
 
       <div class="letter-body">
         <p>
-          I know I hurt you, and that breaks my heart more than anything in this world.
-          You deserve someone who treats you with all the <span class="highlight">gentleness, care, and love</span>
-          that you so beautifully give to others — and I fell short of that.
+          Je sais que je t'ai blessée, et cette pensée me pèse sur le cœur plus que tout au monde.
+          Tu mérites d'être aimée avec toute la <span class="accent">tendresse, la douceur et le respect</span>
+          que tu donnes si naturellement aux autres — et je n'ai pas été à la hauteur.
         </p>
         <p>
-          I am truly, deeply <span class="highlight">sorry</span>. Not because I feel uncomfortable,
-          but because seeing you hurt tears me apart. You are the most precious person in my life,
-          and the thought that I caused you pain is something I carry heavily in my heart.
+          Chaima, je suis <span class="bold-rose">sincèrement, profondément désolé</span>.
+          Non pas parce que je suis mal à l'aise, mais parce que te voir triste
+          me brise en mille morceaux. Tu es la personne la plus précieuse de ma vie,
+          et savoir que c'est moi qui t'ai fait du mal est quelque chose que je ne peux pas supporter.
         </p>
         <p>
-          You are my <span class="highlight">sunshine on cloudy days</span>, my calm in every storm,
-          the reason I smile for no reason at all. Without you, my world loses its color.
-          I do not take you for granted — I never will again.
+          Tu es mon <span class="accent">soleil dans les jours sombres</span>, mon calme dans chaque tempête,
+          la raison pour laquelle je souris sans même m'en rendre compte.
+          Sans toi, ma vie n'a plus de couleur. Je ne te prends pas pour acquise —
+          jamais je ne le ferai à nouveau, <span class="bold-rose">je te le jure</span>.
         </p>
         <p>
-          Please give me the chance to make things right. I promise to do better,
-          to <span class="highlight">love you louder</span>, and to cherish every moment we have together.
+          Donne-moi la chance de tout réparer. Je veux t'aimer mieux,
+          t'aimer plus fort, et <span class="accent">chérir chaque instant</span> que la vie nous donne ensemble.
+          Mon cœur t'appartient, Chaima — entièrement et pour toujours.
         </p>
       </div>
 
-      <div class="rose-divider">
-        <div class="rose-line"></div>
-        <span>💕</span>
-        <div class="rose-line"></div>
+      <div class="div-heart">
+        <div class="dline"></div>
+        <span class="dico">💕</span>
+        <div class="dline"></div>
       </div>
 
-      <div class="promises">
-        <h3>My Promises to You</h3>
-        <ul class="promise-list">
-          <li class="promise-item">
-            <span class="promise-icon">🌹</span>
-            <span>I promise to always listen to you — truly listen — before I speak.</span>
-          </li>
-          <li class="promise-item">
-            <span class="promise-icon">💖</span>
-            <span>I promise to remind you every single day how much you mean to me.</span>
-          </li>
-          <li class="promise-item">
-            <span class="promise-icon">✨</span>
-            <span>I promise to be your safe place, your peace, your home.</span>
-          </li>
-          <li class="promise-item">
-            <span class="promise-icon">🤝</span>
-            <span>I promise to never let my pride hurt our love again.</span>
-          </li>
-          <li class="promise-item">
-            <span class="promise-icon">🌙</span>
-            <span>I promise to love you more with every sunrise and every sunset.</span>
-          </li>
+      <div class="promises-box">
+        <h3>✦ Mes Promesses Pour Toi ✦</h3>
+        <ul class="p-list">
+          <li class="p-item"><span class="p-ico">🌹</span><span>Je promets de toujours t'écouter — vraiment t'écouter — avant de parler.</span></li>
+          <li class="p-item"><span class="p-ico">💖</span><span>Je promets de te rappeler chaque jour à quel point tu comptes pour moi.</span></li>
+          <li class="p-item"><span class="p-ico">✨</span><span>Je promets d'être ton refuge, ta paix, ta maison.</span></li>
+          <li class="p-item"><span class="p-ico">🤝</span><span>Je promets de ne plus jamais laisser mon orgueil blesser notre amour.</span></li>
+          <li class="p-item"><span class="p-ico">🌙</span><span>Je promets de t'aimer davantage à chaque lever et à chaque coucher de soleil.</span></li>
+          <li class="p-item"><span class="p-ico">💝</span><span>Je promets que tu ne regretteras jamais d'avoir choisi de me pardonner.</span></li>
         </ul>
       </div>
 
-      <div class="letter-sign">
-        <p class="forever">forever yours,</p>
-        <p class="name">Your Love 💕</p>
+      <div class="signature">
+        <p class="pour">pour toujours tien,</p>
+        <p class="sname">Ton Amour 💕</p>
       </div>
     </div>
 
-    <div class="response-section">
-      <p>Can you find it in your heart to forgive me?</p>
-      <div class="btn-group">
-        <button class="btn-yes" onclick="forgiven()">Yes, I forgive you 💖</button>
-        <button class="btn-no" id="btn-no" onmouseover="runAway(this)" onclick="runAway(this)">Not yet...</button>
+    <div class="btn-section">
+      <p class="question">Est-ce que tu peux trouver dans ton cœur de me pardonner ?</p>
+      <div class="btns">
+        <button class="btn-oui" onclick="pardonnee()">Oui, je te pardonne 💖</button>
+        <button class="btn-non" id="btn-non"
+          onmouseover="fuirBouton(this)"
+          ontouchstart="fuirBouton(this)">Pas encore...</button>
       </div>
     </div>
+
   </div>
 
-  <!-- Screen 3: Forgiven! -->
-  <div id="forgiven-screen">
-    <div class="big-heart-container">
-      <span class="big-heart">💖</span>
-      <div class="sparkles" id="sparkles"></div>
+  <!-- ══ SCREEN 3 : Pardonnée ══ -->
+  <div id="screen-pardonne">
+
+    <div class="heart-burst">
+      <span class="main-heart">💖</span>
+      <div class="orbit" id="orbit"></div>
     </div>
-    <h2 class="forgiven-title">Thank You! 🥺</h2>
-    <p class="forgiven-sub">You just made me the happiest person alive...</p>
-    <div class="confetti-row">
-      <span>🎊</span><span>🌹</span><span>💕</span><span>✨</span>
-      <span>🌸</span><span>💖</span><span>🌹</span><span>🎊</span>
+
+    <h2 class="pardonne-title">Merci, Chaima ! 🥺</h2>
+    <p class="pardonne-sub">Tu viens de me rendre le plus heureux du monde...</p>
+
+    <div class="emoji-row">
+      <span>🎊</span><span>🌹</span><span>💕</span><span>✨</span><span>🌸</span>
     </div>
-    <p style="color: var(--text); font-size: 1rem; font-weight: 300; max-width: 360px; line-height: 1.8; margin-bottom: 32px;">
-      I will spend every day making sure you never regret this beautiful heart of yours.
-      You are my everything. 💝
+
+    <p class="final-msg">
+      Je passerai chaque jour à m'assurer que tu ne regrettes jamais
+      la beauté de ton cœur généreux. Tu es mon tout, Chaima. 💝
     </p>
-    <button class="btn-restart" onclick="restart()">Read again 🌸</button>
+
+    <button class="btn-rejouer" onclick="rejouer()">Relire la lettre 🌸</button>
   </div>
 
 </div>
 
 <script>
-  // Generate floating hearts
-  const bg = document.getElementById('hearts-bg');
-  const heartChars = ['💖','💕','💗','💓','🌹','✨','💝','🌸'];
-  for (let i = 0; i < 22; i++) {
-    const h = document.createElement('span');
-    h.className = 'bg-heart';
-    h.textContent = heartChars[Math.floor(Math.random() * heartChars.length)];
-    h.style.left = Math.random() * 100 + '%';
-    h.style.fontSize = (14 + Math.random() * 18) + 'px';
-    h.style.animationDuration = (8 + Math.random() * 14) + 's';
-    h.style.animationDelay = (Math.random() * 12) + 's';
-    bg.appendChild(h);
+  // ── Floating petals
+  const bg = document.getElementById('petal-bg');
+  const chars = ['🌸','🌹','💖','💕','✨','💗','🌷','💝'];
+  for (let i = 0; i < 28; i++) {
+    const el = document.createElement('span');
+    el.className = 'fp';
+    el.textContent = chars[Math.floor(Math.random() * chars.length)];
+    el.style.left = Math.random() * 100 + '%';
+    el.style.fontSize = (12 + Math.random() * 16) + 'px';
+    el.style.animationDuration = (9 + Math.random() * 15) + 's';
+    el.style.animationDelay = (Math.random() * 14) + 's';
+    bg.appendChild(el);
   }
 
-  function openEnvelope() {
-    const flap = document.getElementById('env-flap');
-    const wrap = document.querySelector('.envelope-wrap');
+  // ── Open envelope
+  function ouvrirEnveloppe() {
+    const flap = document.getElementById('svg-flap');
     flap.style.transform = 'rotateX(180deg)';
-    flap.style.transformOrigin = 'top center';
-    wrap.style.animation = 'none';
-    wrap.style.transform = 'scale(0.9)';
+    document.querySelector('.env-outer').style.animation = 'none';
+    document.querySelector('.env-outer').style.transform = 'scale(0.88)';
+    document.querySelector('.env-outer').style.opacity = '0.4';
+    document.querySelector('.env-outer').style.transition = 'all 0.5s ease';
     setTimeout(() => {
-      document.getElementById('envelope-screen').style.display = 'none';
-      const ls = document.getElementById('letter-screen');
+      document.getElementById('screen-envelope').style.display = 'none';
+      const ls = document.getElementById('screen-letter');
       ls.style.display = 'flex';
-    }, 500);
+    }, 550);
   }
 
-  let noAttempts = 0;
-  function runAway(btn) {
-    noAttempts++;
+  // ── Runaway "Non" button
+  let fuites = 0;
+  function fuirBouton(btn) {
+    fuites++;
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    const x = Math.random() * (vw - 160);
-    const y = Math.random() * (vh - 80);
+    const bw = 160, bh = 60;
+    const x = Math.max(10, Math.min(vw - bw - 10, Math.random() * (vw - bw)));
+    const y = Math.max(10, Math.min(vh - bh - 10, Math.random() * (vh - bh)));
     btn.style.position = 'fixed';
-    btn.style.transition = 'all 0.35s cubic-bezier(0.34,1.56,0.64,1)';
+    btn.style.transition = 'all 0.4s cubic-bezier(0.34,1.56,0.64,1)';
     btn.style.left = x + 'px';
     btn.style.top  = y + 'px';
-    btn.style.zIndex = 9999;
-    if (noAttempts >= 3) {
-      btn.textContent = 'Okay... fine 😒';
-    }
-    if (noAttempts >= 5) {
-      btn.style.opacity = '0.3';
-      btn.style.fontSize = '0.75rem';
-    }
+    btn.style.zIndex = '9999';
+    if (fuites === 3) btn.textContent = 'Arrête de me suivre 😅';
+    if (fuites === 5) { btn.style.opacity = '0.4'; btn.style.fontSize = '0.8rem'; }
+    if (fuites >= 7) { btn.style.opacity = '0.1'; btn.style.fontSize = '0.65rem'; btn.textContent = 'Bon... d\'accord 😒'; }
   }
 
-  function forgiven() {
-    document.getElementById('letter-screen').style.display = 'none';
-    const fs = document.getElementById('forgiven-screen');
-    fs.style.display = 'flex';
-    addSparkles();
-    launchConfetti();
+  // ── Pardonnée screen
+  function pardonnee() {
+    document.getElementById('screen-letter').style.display = 'none';
+    const ps = document.getElementById('screen-pardonne');
+    ps.style.display = 'flex';
+    buildOrbit();
+    moreHearts();
   }
 
-  function addSparkles() {
-    const container = document.getElementById('sparkles');
-    const sparkleList = ['✨','💖','🌸','⭐','💕'];
-    for (let i = 0; i < 8; i++) {
-      const s = document.createElement('span');
-      s.className = 'sparkle';
-      s.textContent = sparkleList[i % sparkleList.length];
-      const angle = (i / 8) * 360;
-      const r = 80;
-      const x = 100 + r * Math.cos(angle * Math.PI / 180) - 10;
-      const y = 100 + r * Math.sin(angle * Math.PI / 180) - 10;
-      s.style.left = x + 'px';
-      s.style.top  = y + 'px';
-      s.style.animationDelay = (i * 0.18) + 's';
-      s.style.animationDuration = (1.2 + Math.random() * 0.8) + 's';
-      container.appendChild(s);
-    }
+  function buildOrbit() {
+    const orbit = document.getElementById('orbit');
+    const orbitIcons = ['🌸','💕','✨','🌹','💖','🌷','⭐','💗'];
+    orbitIcons.forEach((icon, i) => {
+      const dot = document.createElement('span');
+      dot.className = 'orbit-dot';
+      dot.textContent = icon;
+      const startDeg = (i / orbitIcons.length) * 360;
+      dot.style.setProperty('--start', startDeg + 'deg');
+      dot.style.top = '50%';
+      dot.style.left = '50%';
+      dot.style.marginTop = '-12px';
+      dot.style.marginLeft = '-12px';
+      dot.style.animationDuration = (4 + Math.random() * 3) + 's';
+      dot.style.animationDelay = (Math.random() * -4) + 's';
+      orbit.appendChild(dot);
+    });
   }
 
-  function launchConfetti() {
-    // Extra burst of floating hearts on forgiven screen
-    for (let i = 0; i < 14; i++) {
-      const h = document.createElement('span');
-      h.className = 'bg-heart';
-      h.textContent = ['💖','🌹','✨','💕','🌸'][Math.floor(Math.random() * 5)];
-      h.style.left = Math.random() * 100 + '%';
-      h.style.fontSize = (18 + Math.random() * 20) + 'px';
-      h.style.animationDuration = (5 + Math.random() * 7) + 's';
-      h.style.animationDelay = (Math.random() * 2) + 's';
-      bg.appendChild(h);
+  function moreHearts() {
+    for (let i = 0; i < 18; i++) {
+      const el = document.createElement('span');
+      el.className = 'fp';
+      el.textContent = chars[Math.floor(Math.random() * chars.length)];
+      el.style.left = Math.random() * 100 + '%';
+      el.style.fontSize = (18 + Math.random() * 22) + 'px';
+      el.style.animationDuration = (5 + Math.random() * 6) + 's';
+      el.style.animationDelay = (Math.random() * 1.5) + 's';
+      bg.appendChild(el);
     }
   }
 
-  function restart() {
-    noAttempts = 0;
-    const btn = document.getElementById('btn-no');
+  function rejouer() {
+    fuites = 0;
+    const btn = document.getElementById('btn-non');
     btn.style.position = '';
     btn.style.left = '';
     btn.style.top = '';
     btn.style.opacity = '';
     btn.style.fontSize = '';
-    btn.textContent = 'Not yet...';
-    document.getElementById('forgiven-screen').style.display = 'none';
-    document.getElementById('envelope-screen').style.display = 'flex';
+    btn.textContent = 'Pas encore...';
+    document.getElementById('screen-pardonne').style.display = 'none';
+    document.getElementById('orbit').innerHTML = '';
+    document.getElementById('screen-envelope').style.display = 'flex';
+    document.querySelector('.env-outer').style.opacity = '1';
+    document.querySelector('.env-outer').style.transform = '';
+    document.querySelector('.env-outer').style.animation = '';
+    document.getElementById('svg-flap').style.transform = '';
   }
 </script>
 </body>
