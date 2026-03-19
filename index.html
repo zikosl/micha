@@ -3,443 +3,787 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For Micha 🌹</title>
+<title>I'm Sorry, My Love 💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,600&family=Lato:wght@300;400&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap');
-*{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;height:100%;overflow:hidden;background:#000;}
-canvas{display:block;}
-#ui{
-  position:fixed;inset:0;pointer-events:none;
-  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
-  padding-bottom:5vh;
-}
-#nameWrap{
-  position:relative;opacity:0;
-  animation: nameIn 3s cubic-bezier(0.16,1,0.3,1) 3.8s forwards;
-}
-@keyframes nameIn{
-  0%{opacity:0;transform:translateY(30px) scale(0.92);}
-  60%{opacity:1;}
-  100%{opacity:1;transform:translateY(0) scale(1);}
-}
-#name{
-  font-family:'Great Vibes',cursive;
-  font-size:clamp(52px,10vw,110px);
-  background:linear-gradient(135deg,#ff8fb8 0%,#ffd6e8 35%,#ff5599 60%,#ffaacc 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 0 22px rgba(255,100,160,0.7)) drop-shadow(0 0 60px rgba(255,60,120,0.4));
-  letter-spacing:4px;line-height:1;
-  animation:nameGlow 3s ease-in-out infinite alternate 6s;
-}
-@keyframes nameGlow{
-  from{filter:drop-shadow(0 0 18px rgba(255,100,160,0.65)) drop-shadow(0 0 50px rgba(255,60,120,0.35));}
-  to{filter:drop-shadow(0 0 32px rgba(255,140,190,0.9)) drop-shadow(0 0 80px rgba(255,80,150,0.55));}
-}
-#sub{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:clamp(12px,2.2vw,20px);color:rgba(255,200,220,0.6);
-  letter-spacing:6px;text-transform:uppercase;text-align:center;margin-top:10px;
-  opacity:0;animation:subIn 2s ease 5.5s forwards;
-}
-@keyframes subIn{from{opacity:0;letter-spacing:14px;}to{opacity:1;letter-spacing:6px;}}
-#grain{
-  position:fixed;inset:-50%;width:200%;height:200%;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  opacity:0.032;pointer-events:none;animation:grain 0.35s steps(1) infinite;
-}
-@keyframes grain{
-  0%{transform:translate(0,0);}10%{transform:translate(-2%,-3%);}
-  20%{transform:translate(3%,1%);}30%{transform:translate(-1%,4%);}
-  40%{transform:translate(2%,-2%);}50%{transform:translate(-3%,2%);}
-  60%{transform:translate(1%,-4%);}70%{transform:translate(-2%,3%);}
-  80%{transform:translate(3%,-1%);}90%{transform:translate(-1%,2%);}
-  100%{transform:translate(2%,-3%);}
-}
-#vignette{
-  position:fixed;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse 80% 80% at 50% 50%,transparent 40%,rgba(0,0,0,0.72) 100%);
-}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --rose: #e8436a;
+    --rose-light: #f9ccd8;
+    --rose-deep: #c02050;
+    --cream: #fff8f9;
+    --gold: #d4a853;
+    --text: #2d1a22;
+    --soft: #7a4558;
+  }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* Floating hearts background */
+  #hearts-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .bg-heart {
+    position: absolute;
+    bottom: -60px;
+    font-size: 20px;
+    opacity: 0;
+    animation: floatUp linear infinite;
+    color: var(--rose-light);
+  }
+
+  @keyframes floatUp {
+    0%   { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+    10%  { opacity: 0.35; }
+    90%  { opacity: 0.2; }
+    100% { transform: translateY(-110vh) rotate(360deg) scale(1.2); opacity: 0; }
+  }
+
+  /* Main layout */
+  #app {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 20px 60px;
+  }
+
+  /* Envelope intro screen */
+  #envelope-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    animation: fadeIn 1.2s ease both;
+  }
+
+  #envelope-screen h1 {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--rose);
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+    letter-spacing: 1px;
+    text-align: center;
+    animation: fadeSlideDown 1.5s ease both 0.5s;
+  }
+
+  .envelope-wrap {
+    position: relative;
+    cursor: pointer;
+    animation: float 3s ease-in-out infinite;
+    filter: drop-shadow(0 12px 32px rgba(232,67,106,0.22));
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-12px); }
+  }
+
+  .envelope-wrap:hover .envelope-body { background: #fde8ef; }
+  .envelope-wrap:hover .env-label { letter-spacing: 3px; color: var(--rose-deep); }
+
+  .envelope-body {
+    width: 260px; height: 175px;
+    background: #fff0f3;
+    border: 2.5px solid var(--rose);
+    border-radius: 6px;
+    position: relative;
+    transition: background 0.3s;
+    overflow: hidden;
+  }
+
+  .env-flap {
+    position: absolute;
+    top: 0; left: 0;
+    width: 260px; height: 90px;
+    clip-path: polygon(0 0, 130px 75px, 260px 0);
+    background: var(--rose);
+    opacity: 0.85;
+    transform-origin: top center;
+    transition: transform 0.5s ease;
+  }
+
+  .env-bottom-flap {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 260px; height: 80px;
+    clip-path: polygon(0 80px, 130px 10px, 260px 80px);
+    background: var(--rose-light);
+  }
+
+  .env-left {
+    position: absolute;
+    top: 0; left: 0;
+    width: 120px; height: 175px;
+    clip-path: polygon(0 0, 0 175px, 120px 87px);
+    background: #fce4ec;
+  }
+
+  .env-right {
+    position: absolute;
+    top: 0; right: 0;
+    width: 120px; height: 175px;
+    clip-path: polygon(120px 0, 120px 175px, 0 87px);
+    background: #fce4ec;
+  }
+
+  .env-seal {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 46px; height: 46px;
+    background: var(--rose);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 0 0 4px #fff0f3, 0 0 0 6px var(--rose);
+    z-index: 10;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 4px #fff0f3, 0 0 0 6px var(--rose); }
+    50%       { transform: translate(-50%, -50%) scale(1.08); box-shadow: 0 0 0 6px #fff0f3, 0 0 0 10px rgba(232,67,106,0.3); }
+  }
+
+  .env-label {
+    margin-top: 28px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--soft);
+    font-size: 1.05rem;
+    letter-spacing: 2px;
+    transition: all 0.3s;
+  }
+
+  /* Main letter screen */
+  #letter-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 680px;
+    animation: letterReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  @keyframes letterReveal {
+    from { transform: translateY(60px) scale(0.85); opacity: 0; }
+    to   { transform: translateY(0) scale(1); opacity: 1; }
+  }
+
+  /* Petals top decoration */
+  .petals-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+    animation: fadeIn 1s ease both 0.3s;
+  }
+
+  .petal {
+    font-size: 18px;
+    animation: sway 2.5s ease-in-out infinite;
+  }
+
+  .petal:nth-child(2) { animation-delay: 0.2s; }
+  .petal:nth-child(3) { animation-delay: 0.4s; }
+  .petal:nth-child(4) { animation-delay: 0.6s; }
+  .petal:nth-child(5) { animation-delay: 0.8s; }
+
+  @keyframes sway {
+    0%, 100% { transform: rotate(-8deg) translateY(0); }
+    50%       { transform: rotate(8deg) translateY(-4px); }
+  }
+
+  /* The letter card */
+  .letter-card {
+    background: #fff;
+    border: 1.5px solid #f8cdd7;
+    border-radius: 16px;
+    padding: 44px 48px;
+    box-shadow: 0 8px 48px rgba(232,67,106,0.1), 0 2px 12px rgba(0,0,0,0.04);
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .letter-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--rose-light), var(--rose), var(--rose-light));
+  }
+
+  .letter-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .letter-header .date-line {
+    font-size: 0.8rem;
+    color: var(--soft);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .letter-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--rose);
+    font-size: 2.2rem;
+    line-height: 1.2;
+    animation: fadeSlideDown 0.8s ease both 0.2s;
+  }
+
+  .letter-body p {
+    color: var(--text);
+    font-size: 1.05rem;
+    line-height: 1.9;
+    margin-bottom: 18px;
+    font-weight: 300;
+    animation: fadeSlideUp 0.7s ease both;
+  }
+
+  .letter-body p:nth-child(1) { animation-delay: 0.3s; }
+  .letter-body p:nth-child(2) { animation-delay: 0.5s; }
+  .letter-body p:nth-child(3) { animation-delay: 0.7s; }
+  .letter-body p:nth-child(4) { animation-delay: 0.9s; }
+
+  .highlight {
+    color: var(--rose-deep);
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  .letter-sign {
+    margin-top: 32px;
+    text-align: right;
+    animation: fadeIn 0.8s ease both 1.1s;
+  }
+
+  .letter-sign .forever {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--soft);
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+  }
+
+  .letter-sign .name {
+    font-family: 'Playfair Display', serif;
+    color: var(--rose);
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+
+  /* Promises section */
+  .promises {
+    margin-top: 36px;
+    padding: 28px 32px;
+    background: #fff8fa;
+    border-radius: 12px;
+    border: 1px dashed var(--rose-light);
+    animation: fadeIn 0.8s ease both 1.3s;
+  }
+
+  .promises h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--rose);
+    font-size: 1.15rem;
+    margin-bottom: 18px;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+
+  .promise-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .promise-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.98rem;
+    color: var(--text);
+    font-weight: 300;
+    line-height: 1.6;
+    opacity: 0;
+    transform: translateX(-20px);
+    animation: slideInLeft 0.5s ease forwards;
+  }
+
+  .promise-item:nth-child(1) { animation-delay: 1.5s; }
+  .promise-item:nth-child(2) { animation-delay: 1.7s; }
+  .promise-item:nth-child(3) { animation-delay: 1.9s; }
+  .promise-item:nth-child(4) { animation-delay: 2.1s; }
+  .promise-item:nth-child(5) { animation-delay: 2.3s; }
+
+  .promise-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  @keyframes slideInLeft {
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Response buttons */
+  .response-section {
+    margin-top: 40px;
+    text-align: center;
+    animation: fadeIn 0.8s ease both 2.5s;
+  }
+
+  .response-section p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--soft);
+    font-size: 1.1rem;
+    margin-bottom: 24px;
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-yes {
+    padding: 16px 48px;
+    background: var(--rose);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 6px 24px rgba(232,67,106,0.35);
+  }
+
+  .btn-yes:hover {
+    background: var(--rose-deep);
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 10px 32px rgba(232,67,106,0.45);
+  }
+
+  .btn-yes:active { transform: scale(0.97); }
+
+  .btn-no {
+    padding: 16px 40px;
+    background: transparent;
+    color: var(--soft);
+    border: 1.5px solid var(--rose-light);
+    border-radius: 50px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+  }
+
+  .btn-no:hover { border-color: var(--rose-light); }
+
+  /* Forgiven screen */
+  #forgiven-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    animation: fadeIn 0.6s ease both;
+  }
+
+  .big-heart-container {
+    position: relative;
+    margin-bottom: 32px;
+  }
+
+  .big-heart {
+    font-size: 120px;
+    animation: heartBeat 1.2s ease-in-out infinite;
+    display: block;
+    filter: drop-shadow(0 8px 24px rgba(232,67,106,0.4));
+  }
+
+  @keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    14%  { transform: scale(1.12); }
+    28%  { transform: scale(1); }
+    42%  { transform: scale(1.08); }
+    56%  { transform: scale(1); }
+  }
+
+  .sparkles {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px; height: 200px;
+    pointer-events: none;
+  }
+
+  .sparkle {
+    position: absolute;
+    font-size: 18px;
+    animation: sparkleAnim 1.5s ease-in-out infinite;
+  }
+
+  @keyframes sparkleAnim {
+    0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
+    50%       { transform: scale(1) rotate(180deg); opacity: 1; }
+  }
+
+  .forgiven-title {
+    font-family: 'Playfair Display', serif;
+    color: var(--rose);
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    animation: bounceIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both 0.3s;
+  }
+
+  .forgiven-sub {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--soft);
+    font-size: 1.25rem;
+    margin-bottom: 40px;
+    animation: fadeSlideUp 0.7s ease both 0.6s;
+  }
+
+  .confetti-row {
+    display: flex;
+    gap: 8px;
+    font-size: 24px;
+    animation: fadeIn 0.5s ease both 0.9s;
+    margin-bottom: 32px;
+  }
+
+  .btn-restart {
+    padding: 12px 36px;
+    background: transparent;
+    color: var(--soft);
+    border: 1.5px solid var(--rose-light);
+    border-radius: 50px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    animation: fadeIn 0.5s ease both 1.2s;
+  }
+
+  .btn-restart:hover { background: #fff0f3; border-color: var(--rose); color: var(--rose); }
+
+  /* Shared animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes fadeSlideDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes bounceIn {
+    from { opacity: 0; transform: scale(0.5); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  /* Rose divider */
+  .rose-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0;
+    color: var(--rose-light);
+    font-size: 18px;
+  }
+
+  .rose-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--rose-light), transparent);
+  }
+
+  @media (max-width: 600px) {
+    .letter-card { padding: 28px 22px; }
+    .promises { padding: 22px 18px; }
+    .forgiven-title { font-size: 2.2rem; }
+    .big-heart { font-size: 90px; }
+  }
 </style>
 </head>
 <body>
-<canvas id="c"></canvas>
-<div id="grain"></div>
-<div id="vignette"></div>
-<div id="ui">
-  <div id="nameWrap">
-    <div id="name">Micha</div>
-    <div id="sub">every rose blooms for you</div>
+
+<!-- Floating hearts background -->
+<div id="hearts-bg"></div>
+
+<div id="app">
+
+  <!-- Screen 1: Envelope -->
+  <div id="envelope-screen">
+    <h1>A letter just for you... 💌</h1>
+    <div class="envelope-wrap" onclick="openEnvelope()">
+      <div class="envelope-body">
+        <div class="env-left"></div>
+        <div class="env-right"></div>
+        <div class="env-bottom-flap"></div>
+        <div class="env-flap" id="env-flap"></div>
+        <div class="env-seal">💖</div>
+      </div>
+      <p class="env-label">Tap to open</p>
+    </div>
   </div>
+
+  <!-- Screen 2: Letter -->
+  <div id="letter-screen">
+    <div class="petals-row">
+      <span class="petal">🌸</span>
+      <span class="petal">🌹</span>
+      <span class="petal">💐</span>
+      <span class="petal">🌹</span>
+      <span class="petal">🌸</span>
+    </div>
+
+    <div class="letter-card">
+      <div class="letter-header">
+        <div class="date-line">A letter from the heart</div>
+        <h2>My Dearest Love...</h2>
+      </div>
+
+      <div class="rose-divider">
+        <div class="rose-line"></div>
+        <span>🌹</span>
+        <div class="rose-line"></div>
+      </div>
+
+      <div class="letter-body">
+        <p>
+          I know I hurt you, and that breaks my heart more than anything in this world.
+          You deserve someone who treats you with all the <span class="highlight">gentleness, care, and love</span>
+          that you so beautifully give to others — and I fell short of that.
+        </p>
+        <p>
+          I am truly, deeply <span class="highlight">sorry</span>. Not because I feel uncomfortable,
+          but because seeing you hurt tears me apart. You are the most precious person in my life,
+          and the thought that I caused you pain is something I carry heavily in my heart.
+        </p>
+        <p>
+          You are my <span class="highlight">sunshine on cloudy days</span>, my calm in every storm,
+          the reason I smile for no reason at all. Without you, my world loses its color.
+          I do not take you for granted — I never will again.
+        </p>
+        <p>
+          Please give me the chance to make things right. I promise to do better,
+          to <span class="highlight">love you louder</span>, and to cherish every moment we have together.
+        </p>
+      </div>
+
+      <div class="rose-divider">
+        <div class="rose-line"></div>
+        <span>💕</span>
+        <div class="rose-line"></div>
+      </div>
+
+      <div class="promises">
+        <h3>My Promises to You</h3>
+        <ul class="promise-list">
+          <li class="promise-item">
+            <span class="promise-icon">🌹</span>
+            <span>I promise to always listen to you — truly listen — before I speak.</span>
+          </li>
+          <li class="promise-item">
+            <span class="promise-icon">💖</span>
+            <span>I promise to remind you every single day how much you mean to me.</span>
+          </li>
+          <li class="promise-item">
+            <span class="promise-icon">✨</span>
+            <span>I promise to be your safe place, your peace, your home.</span>
+          </li>
+          <li class="promise-item">
+            <span class="promise-icon">🤝</span>
+            <span>I promise to never let my pride hurt our love again.</span>
+          </li>
+          <li class="promise-item">
+            <span class="promise-icon">🌙</span>
+            <span>I promise to love you more with every sunrise and every sunset.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="letter-sign">
+        <p class="forever">forever yours,</p>
+        <p class="name">Your Love 💕</p>
+      </div>
+    </div>
+
+    <div class="response-section">
+      <p>Can you find it in your heart to forgive me?</p>
+      <div class="btn-group">
+        <button class="btn-yes" onclick="forgiven()">Yes, I forgive you 💖</button>
+        <button class="btn-no" id="btn-no" onmouseover="runAway(this)" onclick="runAway(this)">Not yet...</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen 3: Forgiven! -->
+  <div id="forgiven-screen">
+    <div class="big-heart-container">
+      <span class="big-heart">💖</span>
+      <div class="sparkles" id="sparkles"></div>
+    </div>
+    <h2 class="forgiven-title">Thank You! 🥺</h2>
+    <p class="forgiven-sub">You just made me the happiest person alive...</p>
+    <div class="confetti-row">
+      <span>🎊</span><span>🌹</span><span>💕</span><span>✨</span>
+      <span>🌸</span><span>💖</span><span>🌹</span><span>🎊</span>
+    </div>
+    <p style="color: var(--text); font-size: 1rem; font-weight: 300; max-width: 360px; line-height: 1.8; margin-bottom: 32px;">
+      I will spend every day making sure you never regret this beautiful heart of yours.
+      You are my everything. 💝
+    </p>
+    <button class="btn-restart" onclick="restart()">Read again 🌸</button>
+  </div>
+
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
 <script>
-const canvas = document.getElementById('c');
-const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
-renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.1;
-
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x06010e);
-scene.fog = new THREE.FogExp2(0x06010e, 0.018);
-
-const camera = new THREE.PerspectiveCamera(42,1,0.1,100);
-camera.position.set(0,1.2,7.5);
-camera.lookAt(0,0.5,0);
-
-function resize(){
-  const W=window.innerWidth,H=window.innerHeight;
-  renderer.setSize(W,H);
-  camera.aspect=W/H;
-  camera.updateProjectionMatrix();
-}
-resize();
-window.addEventListener('resize',resize);
-
-// Lights
-scene.add(new THREE.AmbientLight(0x1a0010,0.6));
-const keyLight=new THREE.DirectionalLight(0xffe0d0,2.2);
-keyLight.position.set(-3,6,4);
-keyLight.castShadow=true;
-keyLight.shadow.mapSize.set(2048,2048);
-keyLight.shadow.camera.near=0.5; keyLight.shadow.camera.far=20;
-keyLight.shadow.camera.left=-5; keyLight.shadow.camera.right=5;
-keyLight.shadow.camera.top=5; keyLight.shadow.camera.bottom=-5;
-scene.add(keyLight);
-const fillLight=new THREE.PointLight(0xff3080,1.8,12);
-fillLight.position.set(3,2,3); scene.add(fillLight);
-const roseGlow=new THREE.PointLight(0xff1050,1.2,8);
-roseGlow.position.set(0,-0.5,1); scene.add(roseGlow);
-const rimLight=new THREE.DirectionalLight(0x4040ff,0.5);
-rimLight.position.set(2,-1,-4);
-scene.add(rimLight);
-
-// Helpers
-const lerp=(a,b,t)=>a+(b-a)*t;
-const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-const easeOutBack=t=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2);};
-
-// Petal geometry
-function makePetalGeo(pw,ph,curvature){
-  pw=pw||0.38; ph=ph||0.52; curvature=curvature||0.22;
-  const shape=new THREE.Shape();
-  shape.moveTo(0,0);
-  shape.bezierCurveTo(-pw*0.6,ph*0.25,-pw*0.55,ph*0.85,0,ph);
-  shape.bezierCurveTo(pw*0.55,ph*0.85,pw*0.6,ph*0.25,0,0);
-  const geo=new THREE.ShapeGeometry(shape,20);
-  const pos=geo.attributes.position;
-  for(let i=0;i<pos.count;i++){
-    const x=pos.getX(i),y=pos.getY(i);
-    pos.setZ(i,Math.sin((y/ph)*Math.PI)*curvature-(x/pw)*(x/pw)*0.08);
+  // Generate floating hearts
+  const bg = document.getElementById('hearts-bg');
+  const heartChars = ['💖','💕','💗','💓','🌹','✨','💝','🌸'];
+  for (let i = 0; i < 22; i++) {
+    const h = document.createElement('span');
+    h.className = 'bg-heart';
+    h.textContent = heartChars[Math.floor(Math.random() * heartChars.length)];
+    h.style.left = Math.random() * 100 + '%';
+    h.style.fontSize = (14 + Math.random() * 18) + 'px';
+    h.style.animationDuration = (8 + Math.random() * 14) + 's';
+    h.style.animationDelay = (Math.random() * 12) + 's';
+    bg.appendChild(h);
   }
-  geo.computeVertexNormals();
-  return geo;
-}
 
-function mkMat(color,roughness){
-  return new THREE.MeshStandardMaterial({color:color,roughness:roughness||0.35,metalness:0,side:THREE.DoubleSide});
-}
-
-// Build rose — petals go directly into parentGroup
-function buildRose(hue,sat,centerH,parentGroup){
-  const outer=new THREE.Color().setHSL(hue/360,sat,0.48);
-  const mid=new THREE.Color().setHSL(hue/360,sat*0.9,0.38);
-  const inner=new THREE.Color().setHSL((hue+8)/360,sat*0.85,0.62);
-  const center=new THREE.Color().setHSL(centerH/360,0.7,0.28);
-
-  // outer petals
-  const oGeo=makePetalGeo(0.36,0.54,0.18);
-  for(let i=0;i<7;i++){
-    const mesh=new THREE.Mesh(oGeo,mkMat(outer.clone().multiplyScalar(0.88+Math.random()*0.14),0.42));
-    mesh.castShadow=true;
-    const a=(i/7)*Math.PI*2;
-    mesh.rotation.z=a; mesh.rotation.x=-0.52-Math.random()*0.08;
-    mesh.position.set(Math.sin(a)*0.05,-0.04,Math.cos(a)*0.05);
-    mesh.userData={layer:'outer',baseRotX:mesh.rotation.x,angle:a};
-    parentGroup.add(mesh);
+  function openEnvelope() {
+    const flap = document.getElementById('env-flap');
+    const wrap = document.querySelector('.envelope-wrap');
+    flap.style.transform = 'rotateX(180deg)';
+    flap.style.transformOrigin = 'top center';
+    wrap.style.animation = 'none';
+    wrap.style.transform = 'scale(0.9)';
+    setTimeout(() => {
+      document.getElementById('envelope-screen').style.display = 'none';
+      const ls = document.getElementById('letter-screen');
+      ls.style.display = 'flex';
+    }, 500);
   }
-  // mid petals
-  const mGeo=makePetalGeo(0.3,0.44,0.24);
-  for(let i=0;i<6;i++){
-    const mesh=new THREE.Mesh(mGeo,mkMat(mid.clone().multiplyScalar(0.9+Math.random()*0.12),0.38));
-    mesh.castShadow=true;
-    const a=(i/6)*Math.PI*2+Math.PI/6;
-    mesh.rotation.z=a; mesh.rotation.x=-0.32-Math.random()*0.07;
-    mesh.position.set(Math.sin(a)*0.03,0.04,Math.cos(a)*0.03);
-    mesh.userData={layer:'mid',baseRotX:mesh.rotation.x,angle:a};
-    parentGroup.add(mesh);
-  }
-  // inner petals
-  const iGeo=makePetalGeo(0.22,0.34,0.3);
-  for(let i=0;i<5;i++){
-    const mesh=new THREE.Mesh(iGeo,mkMat(inner.clone(),0.32));
-    mesh.castShadow=true;
-    const a=(i/5)*Math.PI*2+Math.PI/10;
-    mesh.rotation.z=a; mesh.rotation.x=-0.15-Math.random()*0.08;
-    mesh.position.set(Math.sin(a)*0.018,0.1,Math.cos(a)*0.018);
-    mesh.userData={layer:'inner',baseRotX:mesh.rotation.x,angle:a};
-    parentGroup.add(mesh);
-  }
-  // centre petals
-  const cGeo=makePetalGeo(0.14,0.22,0.35);
-  for(let i=0;i<4;i++){
-    const mesh=new THREE.Mesh(cGeo,mkMat(center.clone(),0.28));
-    const a=(i/4)*Math.PI*2;
-    mesh.rotation.z=a; mesh.rotation.x=-0.05;
-    mesh.position.set(Math.sin(a)*0.01,0.17,Math.cos(a)*0.01);
-    mesh.userData={layer:'center',baseRotX:-0.05,angle:a};
-    parentGroup.add(mesh);
-  }
-  // dome
-  const dome=new THREE.Mesh(new THREE.SphereGeometry(0.07,16,10,0,Math.PI*2,0,Math.PI*0.55),mkMat(center.clone(),0.25));
-  dome.position.y=0.21; dome.rotation.x=Math.PI;
-  parentGroup.add(dome);
-  // dewdrops — plain ASCII minus signs
-  const dropMat=new THREE.MeshStandardMaterial({color:0xd8f0ff,roughness:0.05,metalness:0,transparent:true,opacity:0.72});
-  [[0.15,-0.02,0.20],[-0.12,0.06,0.18]].forEach(function(d){
-    const drop=new THREE.Mesh(new THREE.SphereGeometry(0.022,10,10),dropMat.clone());
-    drop.position.set(d[0],d[1],d[2]);
-    parentGroup.add(drop);
-  });
-}
 
-// Stem
-function buildStem(from,to,radius){
-  const mid=new THREE.Vector3(
-    lerp(from.x,to.x,0.5)+(Math.random()-0.5)*0.3,
-    lerp(from.y,to.y,0.45)-Math.random()*0.3,
-    lerp(from.z,to.z,0.5)+(Math.random()-0.5)*0.15
-  );
-  const mesh=new THREE.Mesh(
-    new THREE.TubeGeometry(new THREE.QuadraticBezierCurve3(from,mid,to),20,radius,8,false),
-    new THREE.MeshStandardMaterial({color:0x2a6025,roughness:0.7,metalness:0.05})
-  );
-  mesh.castShadow=true;
-  scene.add(mesh);
-}
-
-// Leaf
-function buildLeaf(pos,rotY,size,flip){
-  const l=size;
-  const shape=new THREE.Shape();
-  shape.moveTo(0,0);
-  shape.bezierCurveTo(-l*0.14,-l*0.05,-l*0.46,l*0.38,-l*0.55,l*0.9);
-  shape.bezierCurveTo(-l*0.3,l*1.05,l*0.3,l*1.05,l*0.55,l*0.9);
-  shape.bezierCurveTo(l*0.46,l*0.38,l*0.14,-l*0.05,0,0);
-  const geo=new THREE.ShapeGeometry(shape,18);
-  const p=geo.attributes.position;
-  for(let i=0;i<p.count;i++){
-    const y=p.getY(i),x=p.getX(i);
-    p.setZ(i,Math.sin((y/l)*Math.PI)*0.06*(flip?-1:1)+x*x*0.12);
-  }
-  geo.computeVertexNormals();
-  const mesh=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({
-    color:new THREE.Color().setHSL(0.33,0.6,0.24+Math.random()*0.08),
-    roughness:0.65,metalness:0.02,side:THREE.DoubleSide
-  }));
-  mesh.position.copy(pos);
-  mesh.rotation.y=rotY;
-  mesh.rotation.x=-Math.PI/2+(flip?0.35:-0.35);
-  mesh.castShadow=true;
-  scene.add(mesh);
-  return mesh;
-}
-
-// Wrap
-function buildWrap(){
-  const g=new THREE.Group();
-  const cone=new THREE.Mesh(
-    new THREE.CylinderGeometry(0.65,0.45,2.2,24,1,true),
-    new THREE.MeshStandardMaterial({color:0xf2c4ce,roughness:0.65,metalness:0.02,side:THREE.DoubleSide})
-  );
-  cone.position.y=-1.55; cone.castShadow=true; g.add(cone);
-  for(let i=0;i<8;i++){
-    const s=new THREE.Mesh(new THREE.PlaneGeometry(0.04,2.2),
-      new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.8,transparent:true,opacity:0.09,side:THREE.DoubleSide}));
-    const a=(i/8)*Math.PI*2;
-    s.position.set(Math.sin(a)*0.66,cone.position.y,Math.cos(a)*0.66); s.rotation.y=a; g.add(s);
-  }
-  const rb=new THREE.Mesh(
-    new THREE.CylinderGeometry(0.68,0.47,2.22,24,1,true,-0.06,0.12),
-    new THREE.MeshStandardMaterial({color:0xc0003c,roughness:0.4,metalness:0.1,side:THREE.DoubleSide})
-  );
-  rb.position.y=cone.position.y;
-  g.add(rb);
-  const ring=new THREE.Mesh(new THREE.TorusGeometry(0.67,0.045,8,40),
-    new THREE.MeshStandardMaterial({color:0xd4004a,roughness:0.35,metalness:0.15}));
-  ring.position.y=cone.position.y+0.9; ring.rotation.x=Math.PI/2; g.add(ring);
-  [[-0.22,0.25],[0.22,-0.25]].forEach(function(br){
-    const bow=new THREE.Mesh(new THREE.TorusGeometry(0.18,0.048,8,30),
-      new THREE.MeshStandardMaterial({color:0xe8005a,roughness:0.3,metalness:0.12}));
-    bow.position.set(br[0],cone.position.y+0.92,0); bow.rotation.y=br[1]; bow.rotation.z=Math.PI/2; g.add(bow);
-  });
-  const knot=new THREE.Mesh(new THREE.SphereGeometry(0.07,12,10),
-    new THREE.MeshStandardMaterial({color:0xff2060,roughness:0.25,metalness:0.15}));
-  knot.position.y=cone.position.y+0.92; g.add(knot);
-  scene.add(g);
-  return g;
-}
-
-// Fireflies
-function buildFireflies(count){
-  const geo=new THREE.BufferGeometry();
-  const posArr=new Float32Array(count*3);
-  const colArr=new Float32Array(count*3);
-  const phases=new Float32Array(count);
-  for(let i=0;i<count;i++){
-    posArr[i*3]=(Math.random()-0.5)*8;
-    posArr[i*3+1]=Math.random()*5-1;
-    posArr[i*3+2]=(Math.random()-0.5)*5;
-    const c=new THREE.Color().setHSL(0.88+Math.random()*0.15,1,0.65+Math.random()*0.2);
-    colArr[i*3]=c.r; colArr[i*3+1]=c.g; colArr[i*3+2]=c.b;
-    phases[i]=Math.random()*Math.PI*2;
-  }
-  geo.setAttribute('position',new THREE.BufferAttribute(posArr,3));
-  geo.setAttribute('color',new THREE.BufferAttribute(colArr,3));
-  const points=new THREE.Points(geo,new THREE.PointsMaterial({
-    size:0.07,vertexColors:true,transparent:true,opacity:0.82,
-    sizeAttenuation:true,blending:THREE.AdditiveBlending,depthWrite:false
-  }));
-  scene.add(points);
-  return {points,geo,phases,posArr:geo.attributes.position.array};
-}
-
-// Falling petals
-function buildFallingPetals(count){
-  const vel=[];
-  const posArr=new Float32Array(count*3);
-  for(let i=0;i<count;i++){
-    posArr[i*3]=(Math.random()-0.5)*10;
-    posArr[i*3+1]=Math.random()*10;
-    posArr[i*3+2]=(Math.random()-0.5)*4;
-    vel.push({vx:(Math.random()-0.5)*0.012,vy:-0.008-Math.random()*0.014,wx:Math.random()*0.02,phase:Math.random()*Math.PI*2});
-  }
-  const geo=new THREE.BufferGeometry();
-  geo.setAttribute('position',new THREE.BufferAttribute(posArr,3));
-  const pts=new THREE.Points(geo,new THREE.PointsMaterial({
-    color:0xff88bb,size:0.08,transparent:true,opacity:0,
-    sizeAttenuation:true,blending:THREE.AdditiveBlending,depthWrite:false
-  }));
-  scene.add(pts);
-  return {pts,geo,vel,posArr:geo.attributes.position.array};
-}
-
-// Build scene
-const bouquetGroup=new THREE.Group();
-scene.add(bouquetGroup);
-
-const roseConfigs=[
-  {x:0,    y:2.05,z:0.1, hue:0,  sat:0.82,delay:0.6, sc:1.0, ch:355},
-  {x:-0.82,y:1.72,z:-0.1,hue:335,sat:0.78,delay:0.3, sc:0.86,ch:330},
-  {x:0.82, y:1.72,z:-0.1,hue:8,  sat:0.80,delay:0.4, sc:0.86,ch:5  },
-  {x:-1.48,y:1.42,z:-0.2,hue:345,sat:0.68,delay:0.15,sc:0.75,ch:340},
-  {x:1.48, y:1.42,z:-0.2,hue:355,sat:0.85,delay:0.22,sc:0.75,ch:350},
-  {x:-1.98,y:1.18,z:-0.3,hue:320,sat:0.72,delay:0.05,sc:0.64,ch:315},
-  {x:1.98, y:1.18,z:-0.3,hue:12, sat:0.78,delay:0.12,sc:0.64,ch:8  },
-  {x:0.28, y:1.58,z:-0.6,hue:350,sat:0.75,delay:0.5, sc:0.78,ch:345},
-];
-
-const roses=roseConfigs.map(function(cfg){
-  const rg=new THREE.Group();
-  rg.position.set(cfg.x,cfg.y,cfg.z);
-  rg.scale.setScalar(0.001);
-  bouquetGroup.add(rg);
-  buildRose(cfg.hue,cfg.sat,cfg.ch,rg);
-  return {group:rg,cfg:cfg};
-});
-
-const stemBase=new THREE.Vector3(0,-0.45,0);
-roseConfigs.forEach(function(cfg,i){
-  buildStem(stemBase.clone(),new THREE.Vector3(cfg.x,cfg.y-0.2,cfg.z),lerp(0.038,0.018,i/roseConfigs.length));
-});
-
-const leafDefs=[
-  {x:-0.5,y:0.4, z:0.15,ry:0.6, fl:true },
-  {x:0.5, y:0.4, z:0.15,ry:-0.6,fl:false},
-  {x:-1.1,y:0.9, z:0,   ry:0.9, fl:true },
-  {x:1.1, y:0.9, z:0,   ry:-0.9,fl:false},
-  {x:-1.5,y:1.0, z:-0.1,ry:1.1, fl:true },
-  {x:1.5, y:1.0, z:-0.1,ry:-1.1,fl:false},
-  {x:-0.3,y:0.7, z:0.1, ry:0.3, fl:false},
-  {x:0.3, y:0.7, z:0.1, ry:-0.3,fl:true },
-];
-const leafMeshes=leafDefs.map(function(l){
-  return buildLeaf(new THREE.Vector3(l.x,l.y,l.z),l.ry,0.28+Math.random()*0.1,l.fl);
-});
-leafMeshes.forEach(function(lm){lm.scale.setScalar(0.01);});
-
-const wrapGroup=buildWrap();
-wrapGroup.scale.setScalar(0.001);
-
-const fireflies=buildFireflies(55);
-const fallingPetals=buildFallingPetals(38);
-
-// Animate
-let startTime=null,camPhase=0;
-function animate(ts){
-  requestAnimationFrame(animate);
-  if(!startTime) startTime=ts;
-  const elapsed=ts-startTime;
-  const t=ts*0.001;
-
-  wrapGroup.scale.setScalar(Math.max(0.001,easeOutBack(clamp(elapsed/500,0,1))));
-  wrapGroup.rotation.y=Math.sin(t*0.4)*0.018;
-
-  leafMeshes.forEach(function(lm,i){
-    lm.scale.setScalar(Math.max(0.001,easeOutBack(clamp((elapsed-200-i*80)/700,0,1))));
-    lm.rotation.z=Math.sin(t*0.38+i*0.7)*0.035;
-  });
-
-  roses.forEach(function(rose,i){
-    const bp=clamp((elapsed-rose.cfg.delay*1200-300)/1800,0,1);
-    rose.group.scale.setScalar(Math.max(0.001,rose.cfg.sc*easeOutBack(bp)));
-    rose.group.rotation.z=Math.sin(t*0.32+i*1.1)*0.028;
-    rose.group.rotation.x=Math.sin(t*0.27+i*0.8)*0.018-0.05;
-    rose.group.rotation.y=Math.sin(t*0.21+i*1.3)*0.015;
-    rose.group.children.forEach(function(child){
-      if(child.userData&&child.userData.layer==='outer'){
-        child.rotation.x=child.userData.baseRotX+Math.sin(t*0.55+child.userData.angle+i)*0.03;
-      }
-    });
-  });
-
-  const ff=fireflies.posArr;
-  for(let i=0;i<55;i++){
-    const ph=fireflies.phases[i];
-    ff[i*3]+=Math.sin(t*0.4+ph)*0.003;
-    ff[i*3+1]+=Math.cos(t*0.3+ph*1.3)*0.002;
-    ff[i*3+2]+=Math.sin(t*0.5+ph*0.7)*0.002;
-  }
-  fireflies.geo.attributes.position.needsUpdate=true;
-  fireflies.points.material.opacity=0.55+0.3*Math.sin(t*0.8);
-
-  if(elapsed>2200){
-    const fp=fallingPetals,fpp=fp.posArr;
-    for(let i=0;i<38;i++){
-      const v=fp.vel[i];
-      fpp[i*3]+=v.vx+Math.sin(t*v.wx+v.phase)*0.005;
-      fpp[i*3+1]+=v.vy;
-      if(fpp[i*3+1]<-3){fpp[i*3]=(Math.random()-0.5)*10;fpp[i*3+1]=6+Math.random()*2;}
+  let noAttempts = 0;
+  function runAway(btn) {
+    noAttempts++;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const x = Math.random() * (vw - 160);
+    const y = Math.random() * (vh - 80);
+    btn.style.position = 'fixed';
+    btn.style.transition = 'all 0.35s cubic-bezier(0.34,1.56,0.64,1)';
+    btn.style.left = x + 'px';
+    btn.style.top  = y + 'px';
+    btn.style.zIndex = 9999;
+    if (noAttempts >= 3) {
+      btn.textContent = 'Okay... fine 😒';
     }
-    fp.geo.attributes.position.needsUpdate=true;
-    fp.pts.material.opacity=clamp((elapsed-2200)/1500,0,1)*0.55;
+    if (noAttempts >= 5) {
+      btn.style.opacity = '0.3';
+      btn.style.fontSize = '0.75rem';
+    }
   }
 
-  camPhase+=0.0008;
-  camera.position.x=Math.sin(camPhase)*0.35;
-  camera.position.y=1.2+Math.sin(camPhase*0.7)*0.12;
-  camera.lookAt(0,0.6,0);
+  function forgiven() {
+    document.getElementById('letter-screen').style.display = 'none';
+    const fs = document.getElementById('forgiven-screen');
+    fs.style.display = 'flex';
+    addSparkles();
+    launchConfetti();
+  }
 
-  roseGlow.intensity=1.0+0.6*Math.sin(t*1.2);
-  fillLight.intensity=1.6+0.4*Math.sin(t*0.7+1);
-  fillLight.position.x=3+Math.sin(t*0.3)*0.5;
+  function addSparkles() {
+    const container = document.getElementById('sparkles');
+    const sparkleList = ['✨','💖','🌸','⭐','💕'];
+    for (let i = 0; i < 8; i++) {
+      const s = document.createElement('span');
+      s.className = 'sparkle';
+      s.textContent = sparkleList[i % sparkleList.length];
+      const angle = (i / 8) * 360;
+      const r = 80;
+      const x = 100 + r * Math.cos(angle * Math.PI / 180) - 10;
+      const y = 100 + r * Math.sin(angle * Math.PI / 180) - 10;
+      s.style.left = x + 'px';
+      s.style.top  = y + 'px';
+      s.style.animationDelay = (i * 0.18) + 's';
+      s.style.animationDuration = (1.2 + Math.random() * 0.8) + 's';
+      container.appendChild(s);
+    }
+  }
 
-  renderer.render(scene,camera);
-}
-requestAnimationFrame(animate);
+  function launchConfetti() {
+    // Extra burst of floating hearts on forgiven screen
+    for (let i = 0; i < 14; i++) {
+      const h = document.createElement('span');
+      h.className = 'bg-heart';
+      h.textContent = ['💖','🌹','✨','💕','🌸'][Math.floor(Math.random() * 5)];
+      h.style.left = Math.random() * 100 + '%';
+      h.style.fontSize = (18 + Math.random() * 20) + 'px';
+      h.style.animationDuration = (5 + Math.random() * 7) + 's';
+      h.style.animationDelay = (Math.random() * 2) + 's';
+      bg.appendChild(h);
+    }
+  }
+
+  function restart() {
+    noAttempts = 0;
+    const btn = document.getElementById('btn-no');
+    btn.style.position = '';
+    btn.style.left = '';
+    btn.style.top = '';
+    btn.style.opacity = '';
+    btn.style.fontSize = '';
+    btn.textContent = 'Not yet...';
+    document.getElementById('forgiven-screen').style.display = 'none';
+    document.getElementById('envelope-screen').style.display = 'flex';
+  }
 </script>
 </body>
 </html>
