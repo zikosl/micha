@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alla ❤️ Chaima</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0010;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    font-family: 'Playfair Display', serif;
+  }
+
+  /* ── Canvas for particles ── */
+  #canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Background gradient orbs ── */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.35;
+    animation: drift 8s ease-in-out infinite alternate;
+    z-index: 0;
+  }
+  .orb1 { width: 500px; height: 500px; background: #ff2d78; top: -100px; left: -100px; animation-delay: 0s; }
+  .orb2 { width: 400px; height: 400px; background: #9b1af5; bottom: -100px; right: -100px; animation-delay: -3s; }
+  .orb3 { width: 300px; height: 300px; background: #ff7edb; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: -5s; }
+
+  @keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(40px, 30px) scale(1.1); }
+  }
+
+  /* ── Card ── */
+  .card {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 60px 70px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,100,180,0.25);
+    border-radius: 32px;
+    backdrop-filter: blur(18px);
+    box-shadow:
+      0 0 0 1px rgba(255,45,120,0.15),
+      0 30px 80px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.1);
+    animation: cardIn 1.2s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(60px) scale(0.92); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* ── Top label ── */
+  .eyebrow {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.4rem;
+    color: #ff7edb;
+    letter-spacing: 0.06em;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+    margin-bottom: 10px;
+  }
+
+  /* ── Main text line ── */
+  .main-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .word {
+    display: inline-block;
+    opacity: 0;
+    animation: wordIn 0.9s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
+
+  .word-alla {
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 900;
+    font-style: italic;
+    background: linear-gradient(135deg, #ff6fce 0%, #ffffff 50%, #ff2d78 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 20px rgba(255,45,120,0.6));
+    animation-delay: 0.8s;
+    text-shadow: none;
+  }
+
+  .word-love {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    color: #ff4d9a;
+    animation-delay: 1.1s;
+    filter: drop-shadow(0 0 14px rgba(255,77,154,0.7));
+  }
+
+  .word-chaima {
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 900;
+    font-style: italic;
+    background: linear-gradient(135deg, #ff2d78 0%, #ff9eef 60%, #ffffff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 20px rgba(255,45,120,0.6));
+    animation-delay: 1.4s;
+  }
+
+  @keyframes wordIn {
+    from { opacity: 0; transform: translateY(30px) scale(0.85); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* ── Animated heart ── */
+  .heart-big {
+    display: block;
+    font-size: 4rem;
+    margin: 20px auto 0;
+    opacity: 0;
+    animation: heartBeat 0.6s ease 1.8s forwards, pulse 1.6s ease-in-out 2.4s infinite;
+    filter: drop-shadow(0 0 20px rgba(255,45,120,0.9));
+    line-height: 1;
+  }
+
+  @keyframes heartBeat {
+    0%   { opacity: 0; transform: scale(0.3); }
+    60%  { opacity: 1; transform: scale(1.25); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 20px rgba(255,45,120,0.9)); }
+    50%       { transform: scale(1.15); filter: drop-shadow(0 0 35px rgba(255,45,120,1)); }
+  }
+
+  /* ── Decorative divider ── */
+  .divider {
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #ff7edb, transparent);
+    margin: 22px auto;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 2s forwards;
+  }
+
+  /* ── Subtitle ── */
+  .subtitle {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.6rem;
+    color: rgba(255,200,230,0.85);
+    opacity: 0;
+    animation: fadeUp 0.8s ease 2.2s forwards;
+    letter-spacing: 0.04em;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Corner deco ── */
+  .deco {
+    position: absolute;
+    font-size: 1.1rem;
+    opacity: 0.4;
+    color: #ff7edb;
+    animation: twinkle 2s ease-in-out infinite alternate;
+  }
+  .deco-tl { top: 18px; left: 22px; animation-delay: 0s; }
+  .deco-tr { top: 18px; right: 22px; animation-delay: 0.5s; }
+  .deco-bl { bottom: 18px; left: 22px; animation-delay: 1s; }
+  .deco-br { bottom: 18px; right: 22px; animation-delay: 1.5s; }
+
+  @keyframes twinkle {
+    from { opacity: 0.2; transform: scale(0.9); }
+    to   { opacity: 0.7; transform: scale(1.1); }
+  }
+
+  /* ── Floating mini hearts ── */
+  .floater {
+    position: fixed;
+    font-size: 1.2rem;
+    pointer-events: none;
+    z-index: 5;
+    animation: floatUp linear infinite;
+    opacity: 0;
+  }
+
+  @keyframes floatUp {
+    0%   { opacity: 0;   transform: translateY(0)    rotate(0deg)   scale(0.6); }
+    10%  { opacity: 0.9; }
+    90%  { opacity: 0.5; }
+    100% { opacity: 0;   transform: translateY(-95vh) rotate(360deg) scale(1.2); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background orbs -->
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- Particle canvas -->
+<canvas id="canvas"></canvas>
+
+<!-- Main card -->
+<div class="card">
+  <span class="deco deco-tl">✦</span>
+  <span class="deco deco-tr">✦</span>
+  <span class="deco deco-bl">✦</span>
+  <span class="deco deco-br">✦</span>
+
+  <p class="eyebrow">— a message just for you —</p>
+
+  <div class="main-line">
+    <span class="word word-alla">Alla</span>
+    <span class="word word-love">loves</span>
+    <span class="word word-chaima">Chaima</span>
+  </div>
+
+  <span class="heart-big">❤️</span>
+
+  <div class="divider"></div>
+
+  <p class="subtitle">forever & always, mon amour 🌹</p>
+</div>
+
+<script>
+/* ─── Particle canvas ─── */
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width  = innerWidth;
+  H = canvas.height = innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+class Particle {
+  constructor() { this.reset(true); }
+  reset(init) {
+    this.x  = Math.random() * W;
+    this.y  = init ? Math.random() * H : H + 10;
+    this.r  = Math.random() * 2.5 + 0.5;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.vy = -(Math.random() * 0.8 + 0.3);
+    this.life = Math.random();
+    this.maxLife = 0.5 + Math.random() * 0.5;
+    this.color = ['#ff2d78','#ff7edb','#ffffff','#ffb3e6','#9b1af5'][Math.floor(Math.random()*5)];
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.life -= 0.003;
+    if (this.life <= 0 || this.y < -10) this.reset(false);
+  }
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, this.life / this.maxLife) * 0.8;
+    ctx.fillStyle = this.color;
+    ctx.shadowColor = this.color;
+    ctx.shadowBlur = 6;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+for (let i = 0; i < 140; i++) particles.push(new Particle());
+
+function loop() {
+  ctx.clearRect(0, 0, W, H);
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(loop);
+}
+loop();
+
+/* ─── Floating hearts ─── */
+const emojis = ['❤️','💕','💖','💗','🌹','✨','💝'];
+function spawnFloater() {
+  const el = document.createElement('div');
+  el.className = 'floater';
+  el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+  el.style.left = Math.random() * 100 + 'vw';
+  el.style.bottom = '-40px';
+  const dur = 5 + Math.random() * 6;
+  el.style.animationDuration = dur + 's';
+  el.style.animationDelay    = '0s';
+  el.style.fontSize = (0.9 + Math.random() * 1.4) + 'rem';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), dur * 1000 + 200);
+}
+setInterval(spawnFloater, 700);
+for (let i = 0; i < 6; i++) setTimeout(spawnFloater, i * 300);
+</script>
+</body>
+</html>
