@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chaima ♥</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #06000d;
+    overflow: hidden;
+    width: 100vw; height: 100vh;
+    font-family: 'Great Vibes', cursive;
+  }
+  canvas { display: block; }
+  #ui {
+    position: fixed;
+    bottom: 12%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    pointer-events: none;
+    z-index: 10;
+  }
+  .name {
+    font-size: clamp(60px, 10vw, 110px);
+    background: linear-gradient(135deg, #ffb3d1 0%, #ff4d8d 40%, #ff99cc 70%, #ff2060 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: nameGlow 2.5s ease-in-out infinite alternate, nameFloat 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px #ff2d6e88);
+    letter-spacing: 6px;
+  }
+  .sub {
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(18px, 3vw, 26px);
+    color: #ff9de2aa;
+    letter-spacing: 4px;
+    margin-top: -6px;
+    animation: fadeSubtle 3s ease-in-out infinite;
+  }
+  @keyframes nameGlow {
+    from { filter: drop-shadow(0 0 15px #ff2d6e66); }
+    to   { filter: drop-shadow(0 0 45px #ff9de2bb); }
+  }
+  @keyframes nameFloat {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-10px); }
+  }
+  @keyframes fadeSubtle {
+    0%, 100% { opacity: 0.5; }
+    50%       { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<div id="ui">
+  <div class="name">Chaima</div>
+  <div class="sub">✦ &nbsp; forever in my heart &nbsp; ✦</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ── Renderer ────────────────────────────────────────────────────────────────
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x06000d, 1);
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
+camera.position.set(0, 0, 7);
+
+// ── Heart shape (parametric) ─────────────────────────────────────────────────
+function heartPoint(t) {
+  // Classic heart parametric
+  const x = 16 * Math.pow(Math.sin(t), 3);
+  const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+  return new THREE.Vector2(x * 0.055, y * 0.055);
+}
+
+// Build extruded heart geometry
+const heartShape = new THREE.Shape();
+const steps = 200;
+for (let i = 0; i <= steps; i++) {
+  const t = (i / steps) * Math.PI * 2;
+  const p = heartPoint(t);
+  i === 0 ? heartShape.moveTo(p.x, p.y) : heartShape.lineTo(p.x, p.y);
+}
+
+const extrudeSettings = {
+  depth: 0.55,
+  bevelEnabled: true,
+  bevelSegments: 6,
+  bevelSize: 0.12,
+  bevelThickness: 0.12,
+  steps: 2
+};
+const heartGeo = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
+heartGeo.center();
+
+// ── Main heart mesh ──────────────────────────────────────────────────────────
+const heartMat = new THREE.MeshPhongMaterial({
+  color: 0xff1a4d,
+  emissive: 0x550010,
+  specular: 0xffaacc,
+  shininess: 120,
+  side: THREE.DoubleSide
+});
+const heart = new THREE.Mesh(heartGeo, heartMat);
+heart.position.y = 0.35;
+scene.add(heart);
+
+// Inner glow layer (slightly larger, transparent pink)
+const glowMat = new THREE.MeshPhongMaterial({
+  color: 0xff6699,
+  emissive: 0xff1155,
+  transparent: true,
+  opacity: 0.18,
+  side: THREE.BackSide
+});
+const glowHeart = new THREE.Mesh(heartGeo, glowMat);
+glowHeart.scale.setScalar(1.06);
+glowHeart.position.y = 0.35;
+scene.add(glowHeart);
+
+// Wireframe overlay
+const wireMat = new THREE.MeshBasicMaterial({
+  color: 0xff6699,
+  wireframe: true,
+  transparent: true,
+  opacity: 0.06
+});
+const wireHeart = new THREE.Mesh(heartGeo, wireMat);
+wireHeart.scale.setScalar(1.01);
+wireHeart.position.y = 0.35;
+scene.add(wireHeart);
+
+// ── Lights ───────────────────────────────────────────────────────────────────
+const ambientLight = new THREE.AmbientLight(0x330011, 1.2);
+scene.add(ambientLight);
+
+const mainLight = new THREE.DirectionalLight(0xffffff, 1.8);
+mainLight.position.set(3, 5, 5);
+scene.add(mainLight);
+
+const pinkLight = new THREE.PointLight(0xff3366, 4, 12);
+pinkLight.position.set(0, 0, 4);
+scene.add(pinkLight);
+
+const rimLight = new THREE.PointLight(0xff99dd, 2.5, 10);
+rimLight.position.set(-4, 2, -2);
+scene.add(rimLight);
+
+const bottomLight = new THREE.PointLight(0xcc0044, 2, 8);
+bottomLight.position.set(0, -4, 2);
+scene.add(bottomLight);
+
+// ── Floating particles (small hearts + orbs) ─────────────────────────────────
+const particleGroup = new THREE.Group();
+scene.add(particleGroup);
+
+// Mini heart particles using same shape but tiny
+const miniHeartGeo = new THREE.ExtrudeGeometry(heartShape, {
+  depth: 0.08,
+  bevelEnabled: true,
+  bevelSize: 0.02,
+  bevelThickness: 0.02,
+  bevelSegments: 2
+});
+miniHeartGeo.center();
+
+const particles = [];
+for (let i = 0; i < 40; i++) {
+  const mat = new THREE.MeshPhongMaterial({
+    color: new THREE.Color().setHSL(Math.random() * 0.08 + 0.92, 1, 0.6 + Math.random() * 0.3),
+    emissive: new THREE.Color(0x330010),
+    transparent: true,
+    opacity: 0.0
+  });
+
+  const mini = new THREE.Mesh(miniHeartGeo, mat);
+  const angle = Math.random() * Math.PI * 2;
+  const radius = 2.5 + Math.random() * 3.5;
+
+  mini.userData = {
+    angle,
+    radius,
+    speed: 0.003 + Math.random() * 0.008,
+    yBase: -4 + Math.random() * 8,
+    ySpeed: 0.005 + Math.random() * 0.01,
+    yOffset: Math.random() * Math.PI * 2,
+    scaleBase: 0.04 + Math.random() * 0.12,
+    phase: Math.random() * Math.PI * 2,
+    lifeSpeed: 0.004 + Math.random() * 0.008,
+    life: Math.random() * Math.PI * 2
+  };
+
+  mini.scale.setScalar(mini.userData.scaleBase);
+  scene.add(mini);
+  particles.push(mini);
+}
+
+// ── Orb particles ────────────────────────────────────────────────────────────
+const orbGeo = new THREE.SphereGeometry(1, 8, 8);
+const orbs = [];
+for (let i = 0; i < 60; i++) {
+  const mat = new THREE.MeshBasicMaterial({
+    color: new THREE.Color().setHSL(Math.random() * 0.1 + 0.9, 1, 0.7),
+    transparent: true,
+    opacity: 0
+  });
+  const orb = new THREE.Mesh(orbGeo, mat);
+  const r = 0.015 + Math.random() * 0.04;
+  orb.scale.setScalar(r);
+
+  orb.userData = {
+    angle: Math.random() * Math.PI * 2,
+    radius: 0.5 + Math.random() * 4,
+    speed: 0.005 + Math.random() * 0.015,
+    yStart: -5,
+    y: -3 + Math.random() * 8,
+    ySpeed: 0.008 + Math.random() * 0.015,
+    life: Math.random() * Math.PI * 2,
+    lifeSpeed: 0.006 + Math.random() * 0.01
+  };
+  scene.add(orb);
+  orbs.push(orb);
+}
+
+// ── Stars background ─────────────────────────────────────────────────────────
+const starsGeo = new THREE.BufferGeometry();
+const starCount = 2000;
+const starPos = new Float32Array(starCount * 3);
+for (let i = 0; i < starCount * 3; i++) {
+  starPos[i] = (Math.random() - 0.5) * 100;
+}
+starsGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+const starsMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.05, transparent: true, opacity: 0.7 });
+scene.add(new THREE.Points(starsGeo, starsMat));
+
+// ── Pulse ring ────────────────────────────────────────────────────────────────
+const rings = [];
+for (let i = 0; i < 3; i++) {
+  const ringGeo = new THREE.RingGeometry(1.8, 1.85, 64);
+  const ringMat = new THREE.MeshBasicMaterial({
+    color: 0xff3366,
+    transparent: true,
+    opacity: 0,
+    side: THREE.DoubleSide
+  });
+  const ring = new THREE.Mesh(ringGeo, ringMat);
+  ring.position.y = 0.35;
+  ring.rotation.x = Math.PI / 2;
+  ring.userData = { phase: (i / 3) * Math.PI * 2 };
+  scene.add(ring);
+  rings.push(ring);
+}
+
+// ── Mouse interaction ─────────────────────────────────────────────────────────
+const mouse = { x: 0, y: 0 };
+document.addEventListener('mousemove', e => {
+  mouse.x = (e.clientX / window.innerWidth  - 0.5) * 2;
+  mouse.y = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+
+// Touch support
+document.addEventListener('touchmove', e => {
+  const t = e.touches[0];
+  mouse.x = (t.clientX / window.innerWidth  - 0.5) * 2;
+  mouse.y = (t.clientY / window.innerHeight - 0.5) * 2;
+}, { passive: true });
+
+// ── Animation ─────────────────────────────────────────────────────────────────
+let clock = new THREE.Clock();
+let targetRotX = 0, targetRotY = 0;
+let currentRotX = 0, currentRotY = 0;
+
+function animate() {
+  requestAnimationFrame(animate);
+  const elapsed = clock.getElapsedTime();
+
+  // Heart rotation (mouse parallax + auto spin)
+  targetRotY = mouse.x * 0.6 + elapsed * 0.35;
+  targetRotX = mouse.y * -0.4 + Math.sin(elapsed * 0.5) * 0.15;
+  currentRotX += (targetRotX - currentRotX) * 0.06;
+  currentRotY += (targetRotY - currentRotY) * 0.06;
+
+  heart.rotation.x = currentRotX;
+  heart.rotation.y = currentRotY;
+  glowHeart.rotation.x = currentRotX;
+  glowHeart.rotation.y = currentRotY;
+  wireHeart.rotation.x = currentRotX;
+  wireHeart.rotation.y = currentRotY;
+
+  // Heart pulse scale
+  const pulse = 1 + Math.sin(elapsed * 2.2) * 0.04;
+  heart.scale.setScalar(pulse);
+  glowHeart.scale.setScalar(pulse * 1.06);
+  wireHeart.scale.setScalar(pulse * 1.01);
+
+  // Pink light orbit
+  pinkLight.position.x = Math.sin(elapsed * 0.7) * 3;
+  pinkLight.position.y = Math.cos(elapsed * 0.5) * 2 + 0.5;
+  pinkLight.intensity = 3.5 + Math.sin(elapsed * 2.2) * 1.5;
+
+  // Particles
+  particles.forEach(p => {
+    const d = p.userData;
+    d.life += d.lifeSpeed;
+    d.angle += d.speed;
+    const opacity = (Math.sin(d.life) * 0.5 + 0.5);
+    p.material.opacity = opacity * 0.85;
+    p.position.x = Math.cos(d.angle) * d.radius;
+    p.position.z = Math.sin(d.angle) * d.radius * 0.6;
+    p.position.y = d.yBase + Math.sin(elapsed * d.ySpeed * 80 + d.yOffset) * 1.2;
+    p.rotation.y = elapsed * 1.2 + d.phase;
+    p.rotation.z = Math.sin(elapsed + d.phase) * 0.3;
+    const s = d.scaleBase * (0.8 + Math.sin(d.life * 1.5) * 0.3);
+    p.scale.setScalar(s);
+  });
+
+  // Orbs
+  orbs.forEach(o => {
+    const d = o.userData;
+    d.life += d.lifeSpeed;
+    d.angle += d.speed;
+    d.y += d.ySpeed * 0.3;
+    if (d.y > 6) { d.y = -5; d.angle = Math.random() * Math.PI * 2; }
+    o.material.opacity = (Math.sin(d.life) * 0.5 + 0.5) * 0.7;
+    o.position.x = Math.cos(d.angle) * d.radius;
+    o.position.z = Math.sin(d.angle) * d.radius;
+    o.position.y = d.y;
+  });
+
+  // Rings
+  rings.forEach((r, i) => {
+    const t = ((elapsed * 0.7 + r.userData.phase) % (Math.PI * 2));
+    const prog = t / (Math.PI * 2);
+    r.scale.setScalar(1 + prog * 2.5);
+    r.material.opacity = (1 - prog) * 0.6;
+  });
+
+  renderer.render(scene, camera);
+}
+animate();
+
+// ── Resize ────────────────────────────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>
